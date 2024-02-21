@@ -1,7 +1,12 @@
 package com.ash.trading.oms.model
 
-import java.util.UUID
+import java.util.*
 
 data class Order(
-    val orderId: UUID
+    val orderId: OrderId,
+    val orderQuantity: OrderQuantity,
+    val instrument: Instrument,
+    val side: TradeSide
 )
+
+typealias OrderId = UUID
