@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class MusicAppApplication
+class OrderApplication
 
 fun main(args: Array<String>) {
-    runApplication<MusicAppApplication>(*args)
+    runApplication<OrderApplication>(*args)
 }
