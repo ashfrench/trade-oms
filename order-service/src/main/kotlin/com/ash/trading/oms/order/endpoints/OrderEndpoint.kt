@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/order")
 class OrderEndpoint {
 
-
     @GetMapping
     fun getOrders(): List<Order> {
         TODO()
@@ -21,4 +20,8 @@ class OrderEndpoint {
         TODO()
     }
 
+    //TODO turn this into a flux
+    fun getOrderUpdates(): List<Order> {
+        TODO()
+    }
 }
