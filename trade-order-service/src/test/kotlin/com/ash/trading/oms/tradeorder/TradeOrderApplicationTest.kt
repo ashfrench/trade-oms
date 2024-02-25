@@ -1,4 +1,4 @@
-package com.ash.trading.oms.order
+package com.ash.trading.oms.tradeorder
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
@@ -9,7 +9,7 @@ import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpStatus
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class OrderApplicationTest(@Autowired val restTemplate: TestRestTemplate) {
+class TradeOrderApplicationTest(@Autowired val restTemplate: TestRestTemplate) {
 
     @Test
     fun contextLoads() {
