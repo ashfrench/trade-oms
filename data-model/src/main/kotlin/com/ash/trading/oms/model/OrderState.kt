@@ -2,7 +2,7 @@ package com.ash.trading.oms.model
 
 enum class OrderState {
     NEW,
-    ACKNOWLEDGED,
+    WORKED,
     EXECUTED,
     PARTIALLY_EXECUTED,
     CANCELLED
