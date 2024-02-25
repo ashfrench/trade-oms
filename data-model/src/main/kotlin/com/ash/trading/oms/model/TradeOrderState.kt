@@ -4,5 +4,5 @@ enum class TradeOrderState {
     NEW,
     EXECUTED,
     PARTIALLY_EXECUTED,
-    CANCELLED
+    REPORTED
 }

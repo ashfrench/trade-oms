@@ -1,13 +1,16 @@
 package com.ash.trading.oms.model
 
-import java.util.*
+import java.util.UUID
 
 data class Order(
-    val orderId: OrderId,
+    val orderId: OrderId = newOrderId(),
     val orderQuantity: OrderQuantity,
-    val orderState: OrderState,
     val instrument: Instrument,
-    val side: TradeSide
+    val side: TradeSide,
+    val orderState: OrderState = OrderState.NEW,
+    val tradeOrders: List<TradeOrderId> = emptyList()
 )
 
 typealias OrderId = UUID
+
+fun newOrderId(): OrderId = UUID.randomUUID()
