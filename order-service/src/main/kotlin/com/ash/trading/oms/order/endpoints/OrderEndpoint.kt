@@ -3,6 +3,7 @@ package com.ash.trading.oms.order.endpoints
 import com.ash.trading.oms.model.Order
 import com.ash.trading.oms.model.OrderId
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -16,7 +17,7 @@ class OrderEndpoint {
     }
 
     @GetMapping("/{orderId}")
-    fun getOrder(orderId: OrderId): Order {
+    fun getOrder(@PathVariable("orderId") orderId: OrderId): Order {
         TODO()
     }
 

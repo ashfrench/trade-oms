@@ -1,0 +1,22 @@
+-- project structure
+    data-model
+
+    auth-service
+    database-service
+
+    order-service
+    trade-order-service
+    trade-service
+
+    fix-service
+    reporting-service
+    admin-service
+
+    web-app
+    mobile-app
+
+--Dockerize
+    dockerize all services with individual Dockerfile per service
+    k8s/tilt or some orchestration to run all services
+
+--Postman Scripts
