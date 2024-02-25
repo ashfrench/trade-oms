@@ -16,11 +16,11 @@ class OrderApplicationTest(@Autowired val restTemplate: TestRestTemplate) {
     private val logger = LoggerFactory.getLogger(OrderApplicationTest::class.java)
 
     @Test
-    fun contextLoads() {
+    fun `context loads`() {
     }
 
     @Test
-    fun testSwagger() {
+    fun `swagger page loads`() {
         val swaggerPage = restTemplate.getForEntity<String>("/swagger-ui/index.html")
         assertThat(swaggerPage.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(swaggerPage.hasBody()).isTrue()
@@ -29,7 +29,7 @@ class OrderApplicationTest(@Autowired val restTemplate: TestRestTemplate) {
     }
 
     @Test
-    fun testApiDocs() {
+    fun `api docs page loads`() {
         val apiDocsPage = restTemplate.getForEntity<String>("/v3/api-docs")
         assertThat(apiDocsPage.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(apiDocsPage.hasBody()).isTrue()
