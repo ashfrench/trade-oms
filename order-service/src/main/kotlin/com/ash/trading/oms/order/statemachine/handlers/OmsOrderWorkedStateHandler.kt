@@ -6,18 +6,32 @@ import com.ash.trading.oms.order.statemachine.IOmsOrderState
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
 import com.ash.trading.oms.order.statemachine.events.TraderExecutedEvent
+import com.ash.trading.oms.order.statemachine.events.TraderWorkingEvent
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 
 object OmsOrderWorkedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
+
     fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
-        return when (event) {
-            is TraderExecutedEvent -> handleTradeExecution(data, event)
-            is OrderCancelledEvent -> handleOrderCancellation(data)
-            else -> handleUnplannedEvent(data, event)
+        return try {
+            when (event) {
+                is TraderExecutedEvent -> handleTradeExecution(data, event)
+                is OrderCancelledEvent -> handleOrderCancellation(data)
+                is TraderWorkingEvent -> handleTraderWorkingEvent(data, event)
+            }
+        } catch (e: Exception) {
+            logger.error("Error Handling Event Type [${event.javaClass.simpleName}] from WORKED state", e)
+            data to OmsOrderState.WORKED
         }
+    }
+
+    private fun handleTraderWorkingEvent(
+        data: OrderQuantity,
+        event: TraderWorkingEvent
+    ): Pair<OrderQuantity, IOmsOrderState> {
+        TODO("Not yet implemented")
     }
 
     private fun handleTradeExecution(data: OrderQuantity, event: TraderExecutedEvent): Pair<OrderQuantity, IOmsOrderState> {
@@ -39,11 +53,6 @@ object OmsOrderWorkedStateHandler {
             workedQuantity = BigDecimal.ZERO
         )
         return updatedData to OmsOrderState.CANCELLED
-    }
-
-    private fun <T> handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
-        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from WORKED state")
-        return data to OmsOrderState.WORKED
     }
 
 }

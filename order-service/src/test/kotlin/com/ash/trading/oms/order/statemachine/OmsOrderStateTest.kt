@@ -121,4 +121,41 @@ class OmsOrderStateTest {
         )
     }
 
+    @Test
+    fun `can transition from partially executed to executed`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal(8), executedQuantity = BigDecimal.TWO)
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(TraderExecutedPayload(newTradeId(), BigDecimal(8)))
+        )
+
+        assertAll(
+            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
+            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
+            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal.ZERO) { "Worked Quantity should be equal 0" } },
+            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.TEN) { "Executed Quantity should be equal 10" } },
+            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
+            { assertEquals(updatedState, OmsOrderState.EXECUTED) }
+        )
+    }
+
+    @Test
+    fun `can transition from partially executed to partially executed`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal(8), executedQuantity = BigDecimal.TWO)
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(TraderExecutedPayload(newTradeId(), BigDecimal(7)))
+        )
+
+        assertAll(
+            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
+            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
+            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal(1)) { "Worked Quantity should be equal 1" } },
+            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal(9)) { "Executed Quantity should be equal 9" } },
+            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
+            { assertEquals(updatedState, OmsOrderState.PARTIALLY_EXECUTED) }
+        )
+    }
 }
