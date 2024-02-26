@@ -49,7 +49,7 @@ object OmsOrderWorkedStateHandler {
 
     private fun handleOrderCancellation(data: OrderQuantity): Pair<OrderQuantity, IOmsOrderState> {
         val updatedData = data.copy(
-            cancelledQuantity = data.workedQuantity,
+            cancelledQuantity = data.workedQuantity + data.openQuantity,
             workedQuantity = BigDecimal.ZERO
         )
         return updatedData to OmsOrderState.CANCELLED
