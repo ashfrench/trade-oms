@@ -22,16 +22,16 @@ object OmsOrderWorkedStateHandler {
                 is TraderWorkingEvent -> handleTraderWorkingEvent(data, event)
             }
         } catch (e: Exception) {
-            logger.error("Error Handling Event Type [${event.javaClass.simpleName}] from WORKED state", e)
+            logger.error("Error Handling Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.WORKED} state", e)
             data to OmsOrderState.WORKED
         }
     }
 
-    private fun handleTraderWorkingEvent(
-        data: OrderQuantity,
-        event: TraderWorkingEvent
-    ): Pair<OrderQuantity, IOmsOrderState> {
-        TODO("Not yet implemented")
+    private fun handleTraderWorkingEvent(data: OrderQuantity, event: TraderWorkingEvent): Pair<OrderQuantity, IOmsOrderState> {
+        val updatedData = data.copy(
+            workedQuantity = data.workedQuantity + event.payload.workedQuantity
+        )
+        return updatedData to OmsOrderState.WORKED
     }
 
     private fun handleTradeExecution(data: OrderQuantity, event: TraderExecutedEvent): Pair<OrderQuantity, IOmsOrderState> {

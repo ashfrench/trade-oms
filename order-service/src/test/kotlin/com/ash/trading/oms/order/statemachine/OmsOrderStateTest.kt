@@ -65,6 +65,20 @@ class OmsOrderStateTest {
     }
 
     @Test
+    fun `can handle invalid worked amount from new`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TWO)
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.NEW.handleEvent(
+            orderQuantity,
+            TraderWorkingEvent(TraderWorkingPayload(newTradeId(), BigDecimal.TEN))
+        )
+
+        assertAll(
+            { assertEquals(orderQuantity, updatedOrderQuantity) },
+            { assertEquals(updatedState, OmsOrderState.NEW) }
+        )
+    }
+
+    @Test
     fun `can transition from worked to executed`() {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
@@ -80,6 +94,39 @@ class OmsOrderStateTest {
             { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
             { assertEquals(updatedState, OmsOrderState.EXECUTED) }
+        )
+    }
+
+    @Test
+    fun `can transition from worked to worked`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TWO)
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
+            orderQuantity,
+            TraderWorkingEvent(TraderWorkingPayload(newTradeId(), BigDecimal.TWO))
+        )
+
+        assertAll(
+            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
+            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal(6)) { "Open Quantity should be equal 6" } },
+            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal(4)) { "Worked Quantity should be equal 4" } },
+            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.ZERO) { "Executed Quantity should be equal 10" } },
+            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal(4)) { "Used Quantity should be equal 4" } },
+            { assertEquals(updatedState, OmsOrderState.WORKED) }
+        )
+    }
+
+    @Test
+    fun `can handle invalid worked amount from worked`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TWO, workedQuantity = BigDecimal.TWO)
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
+            orderQuantity,
+            TraderWorkingEvent(TraderWorkingPayload(newTradeId(), BigDecimal.TEN))
+        )
+
+        assertAll(
+            { assertEquals(orderQuantity, updatedOrderQuantity) },
+            { assertEquals(updatedState, OmsOrderState.WORKED) }
         )
     }
 

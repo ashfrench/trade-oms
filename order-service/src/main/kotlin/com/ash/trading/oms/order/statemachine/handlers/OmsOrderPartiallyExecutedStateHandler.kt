@@ -12,11 +12,17 @@ import java.math.BigDecimal
 object OmsOrderPartiallyExecutedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
+
     fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
-        return when (event) {
-            is TraderExecutedEvent -> handleTradeExecution(data, event)
-            is OrderCancelledEvent -> handleOrderCancellation(data)
-            else -> handleUnplannedEvent(data, event)
+        return try {
+            when (event) {
+                is TraderExecutedEvent -> handleTradeExecution(data, event)
+                is OrderCancelledEvent -> handleOrderCancellation(data)
+                else -> handleUnplannedEvent(data, event)
+            }
+        } catch (e: Exception) {
+            logger.error("Error Handling Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.PARTIALLY_EXECUTED} state", e)
+            data to OmsOrderState.PARTIALLY_EXECUTED
         }
     }
 
@@ -42,7 +48,7 @@ object OmsOrderPartiallyExecutedStateHandler {
     }
 
     private fun <T> handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
-        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from PARTIALLY_EXECUTED state")
+        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.PARTIALLY_EXECUTED} state")
         return data to OmsOrderState.PARTIALLY_EXECUTED
     }
 

@@ -13,10 +13,15 @@ object OmsOrderNewStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderNewStateHandler::class.java)
 
     fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
-        return when (event) {
-            is OrderCancelledEvent -> handleOrderCancelledEvent(data)
-            is TraderWorkingEvent -> handleTraderWorkingEvent(data, event)
-            else -> handleUnplannedEvent(data, event)
+        return try {
+            when (event) {
+                is OrderCancelledEvent -> handleOrderCancelledEvent(data)
+                is TraderWorkingEvent -> handleTraderWorkingEvent(data, event)
+                else -> handleUnplannedEvent(data, event)
+            }
+        } catch (e: Exception) {
+            logger.error("Error Handling Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.NEW} state", e)
+            data to OmsOrderState.NEW
         }
     }
 
@@ -31,7 +36,7 @@ object OmsOrderNewStateHandler {
     }
 
     private fun <T> handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
-        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from NEW state")
+        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.NEW} state")
         return data to OmsOrderState.NEW
     }
 
