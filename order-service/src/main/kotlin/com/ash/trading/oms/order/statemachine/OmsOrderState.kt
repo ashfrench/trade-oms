@@ -23,5 +23,5 @@ enum class OmsOrderState {
         override fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> = OmsOrderCancelledStateHandler.handleEvent(data, event)
     };
 
-    abstract fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, Any>
+    abstract fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState>
 }
