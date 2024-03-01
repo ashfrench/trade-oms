@@ -1,7 +1,6 @@
 package com.ash.trading.oms.order.statemachine.handlers
 
 import com.ash.trading.oms.model.OrderQuantity
-import com.ash.trading.oms.order.statemachine.IOmsOrderState
 import com.ash.trading.oms.order.statemachine.OmsOrderState
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
@@ -12,7 +11,7 @@ object OmsOrderNewStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderNewStateHandler::class.java)
 
-    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
+    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
         return try {
             when (event) {
                 is OrderCancelledEvent -> handleOrderCancelledEvent(data)
@@ -25,17 +24,17 @@ object OmsOrderNewStateHandler {
         }
     }
 
-    private fun handleOrderCancelledEvent(data: OrderQuantity): Pair<OrderQuantity, IOmsOrderState> {
+    private fun handleOrderCancelledEvent(data: OrderQuantity): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(cancelledQuantity = data.totalQuantity)
         return updatedData to OmsOrderState.CANCELLED
     }
 
-    private fun handleTraderWorkingEvent(data: OrderQuantity, event: TraderWorkingEvent): Pair<OrderQuantity, IOmsOrderState> {
+    private fun handleTraderWorkingEvent(data: OrderQuantity, event: TraderWorkingEvent): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(workedQuantity = event.payload.workedQuantity)
         return updatedData to OmsOrderState.WORKED
     }
 
-    private fun <T> handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
+    private fun <T> handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
         logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.NEW} state")
         return data to OmsOrderState.NEW
     }

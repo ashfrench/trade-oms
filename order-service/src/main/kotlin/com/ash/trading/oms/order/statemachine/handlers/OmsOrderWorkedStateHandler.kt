@@ -2,7 +2,6 @@ package com.ash.trading.oms.order.statemachine.handlers
 
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.order.statemachine.OmsOrderState
-import com.ash.trading.oms.order.statemachine.IOmsOrderState
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
 import com.ash.trading.oms.order.statemachine.events.TraderExecutedEvent
@@ -14,7 +13,7 @@ object OmsOrderWorkedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
-    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
+    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
         return try {
             when (event) {
                 is TraderExecutedEvent -> handleTradeExecution(data, event)
@@ -27,14 +26,14 @@ object OmsOrderWorkedStateHandler {
         }
     }
 
-    private fun handleTraderWorkingEvent(data: OrderQuantity, event: TraderWorkingEvent): Pair<OrderQuantity, IOmsOrderState> {
+    private fun handleTraderWorkingEvent(data: OrderQuantity, event: TraderWorkingEvent): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
             workedQuantity = data.workedQuantity + event.payload.workedQuantity
         )
         return updatedData to OmsOrderState.WORKED
     }
 
-    private fun handleTradeExecution(data: OrderQuantity, event: TraderExecutedEvent): Pair<OrderQuantity, IOmsOrderState> {
+    private fun handleTradeExecution(data: OrderQuantity, event: TraderExecutedEvent): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
             executedQuantity = event.payload.executedQuantity,
             workedQuantity = data.workedQuantity - event.payload.executedQuantity
@@ -47,7 +46,7 @@ object OmsOrderWorkedStateHandler {
         }
     }
 
-    private fun handleOrderCancellation(data: OrderQuantity): Pair<OrderQuantity, IOmsOrderState> {
+    private fun handleOrderCancellation(data: OrderQuantity): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
             cancelledQuantity = data.workedQuantity + data.openQuantity,
             workedQuantity = BigDecimal.ZERO

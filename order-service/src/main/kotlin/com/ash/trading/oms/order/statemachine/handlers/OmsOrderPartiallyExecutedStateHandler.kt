@@ -1,7 +1,6 @@
 package com.ash.trading.oms.order.statemachine.handlers
 
 import com.ash.trading.oms.model.OrderQuantity
-import com.ash.trading.oms.order.statemachine.IOmsOrderState
 import com.ash.trading.oms.order.statemachine.OmsOrderState
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
@@ -13,7 +12,7 @@ object OmsOrderPartiallyExecutedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
-    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
+    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
         return try {
             when (event) {
                 is TraderExecutedEvent -> handleTradeExecution(data, event)
@@ -26,7 +25,7 @@ object OmsOrderPartiallyExecutedStateHandler {
         }
     }
 
-    private fun handleTradeExecution(data: OrderQuantity, event: TraderExecutedEvent): Pair<OrderQuantity, IOmsOrderState> {
+    private fun handleTradeExecution(data: OrderQuantity, event: TraderExecutedEvent): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
             executedQuantity = event.payload.executedQuantity + data.executedQuantity,
             workedQuantity = data.workedQuantity - event.payload.executedQuantity
@@ -39,7 +38,7 @@ object OmsOrderPartiallyExecutedStateHandler {
         }
     }
 
-    private fun handleOrderCancellation(data: OrderQuantity): Pair<OrderQuantity, IOmsOrderState> {
+    private fun handleOrderCancellation(data: OrderQuantity): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
             cancelledQuantity = data.workedQuantity,
             workedQuantity = BigDecimal.ZERO
@@ -47,7 +46,7 @@ object OmsOrderPartiallyExecutedStateHandler {
         return updatedData to OmsOrderState.CANCELLED
     }
 
-    private fun <T> handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, IOmsOrderState> {
+    private fun <T> handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
         logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.PARTIALLY_EXECUTED} state")
         return data to OmsOrderState.PARTIALLY_EXECUTED
     }
