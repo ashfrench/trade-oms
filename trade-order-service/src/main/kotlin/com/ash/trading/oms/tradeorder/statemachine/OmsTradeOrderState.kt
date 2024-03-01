@@ -2,6 +2,7 @@ package com.ash.trading.oms.tradeorder.statemachine
 
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.tradeorder.statemachine.event.OmsTradeOrderEvent
+import com.ash.trading.oms.tradeorder.statemachine.handlers.OmsTradeOrderCancelledStateHandler
 
 enum class OmsTradeOrderState {
 
@@ -30,12 +31,7 @@ enum class OmsTradeOrderState {
         }
     },
     CANCELLED {
-        override fun <T> handleEvent(
-            data: OrderQuantity,
-            event: OmsTradeOrderEvent<T>
-        ): Pair<OrderQuantity, OmsTradeOrderState> {
-            TODO("Not yet implemented")
-        }
+        override fun <T> handleEvent(data: OrderQuantity, event: OmsTradeOrderEvent<T>) = OmsTradeOrderCancelledStateHandler.handleEvent(data, event)
     },
     DELETED {
         override fun <T> handleEvent(
