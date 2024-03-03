@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 
 class OmsTradeOrderTerminalStateHandler(private val state: OmsTradeOrderState) {
 
-    private val logger = LoggerFactory.getLogger(OmsTradeOrderDeletedStateHandler::class.java)
+    private val logger = LoggerFactory.getLogger(OmsTradeOrderTerminalStateHandler::class.java)
 
     fun <T> handleEvent(data: OrderQuantity, event: OmsTradeOrderEvent<T>): Pair<OrderQuantity, OmsTradeOrderState> {
         logger.error("Invalid Event Type [${event.javaClass.simpleName}] from $state state")
