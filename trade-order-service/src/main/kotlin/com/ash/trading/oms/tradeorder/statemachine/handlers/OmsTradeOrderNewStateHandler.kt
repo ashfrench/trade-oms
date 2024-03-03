@@ -2,6 +2,7 @@ package com.ash.trading.oms.tradeorder.statemachine.handlers
 
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
+import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
 import com.ash.trading.oms.tradeorder.statemachine.event.OmsTradeOrderEvent
 import org.slf4j.LoggerFactory
 
@@ -11,7 +12,9 @@ object OmsTradeOrderNewStateHandler {
 
     fun <T> handleEvent(data: OrderQuantity, event: OmsTradeOrderEvent<T>): Pair<OrderQuantity, OmsTradeOrderState> {
         try {
-            TODO()
+            when(event){
+                is AddTradeToTradeOrderEvent -> TODO()
+            }
         } catch (e: Exception) {
             logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsTradeOrderState.NEW} state", e)
             return data to OmsTradeOrderState.NEW
