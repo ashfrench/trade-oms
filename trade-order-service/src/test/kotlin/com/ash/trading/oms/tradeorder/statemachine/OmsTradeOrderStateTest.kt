@@ -4,7 +4,8 @@ import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.model.newOrderId
 import com.ash.trading.oms.model.newTradeId
 import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 

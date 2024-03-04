@@ -1,6 +1,7 @@
 package com.ash.trading.oms.model
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
@@ -15,7 +16,7 @@ class OrderQuantityTest {
             { assertEquals(BigDecimal.ONE, orderQuantity.openQuantity) { "Open Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.usedQuantity) { "Used Quantity should be equal 0" } }
         )
     }

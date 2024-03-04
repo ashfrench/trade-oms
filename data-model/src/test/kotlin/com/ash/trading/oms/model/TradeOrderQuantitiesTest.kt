@@ -1,6 +1,7 @@
 package com.ash.trading.oms.model
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
@@ -14,7 +15,7 @@ class TradeOrderQuantitiesTest {
             { assertEquals(BigDecimal.ONE, orderQuantity.totalQuantity) { "Total Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.openQuantity) { "Open Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.usedQuantity) { "Used Quantity should be equal 0" } }
         )
     }
@@ -26,7 +27,7 @@ class TradeOrderQuantitiesTest {
             { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.openQuantity) { "Open Quantity should be equal 2" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.usedQuantity) { "Used Quantity should be equal 0" } }
         )
     }
@@ -41,7 +42,7 @@ class TradeOrderQuantitiesTest {
             { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
@@ -56,7 +57,7 @@ class TradeOrderQuantitiesTest {
             { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
@@ -71,7 +72,7 @@ class TradeOrderQuantitiesTest {
             { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }

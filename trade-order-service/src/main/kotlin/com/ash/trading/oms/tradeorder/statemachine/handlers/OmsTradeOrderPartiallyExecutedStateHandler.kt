@@ -1,6 +1,5 @@
 package com.ash.trading.oms.tradeorder.statemachine.handlers
 
-import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
 import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
