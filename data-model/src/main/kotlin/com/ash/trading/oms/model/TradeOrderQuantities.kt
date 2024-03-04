@@ -24,7 +24,7 @@ data class TradeOrderQuantities(
         check(totalQuantity >= executedQuantity) { "Total Quantity [$totalQuantity] must be greater than or equal to Executed Quantity [$executedQuantity]"}
         check(totalQuantity >= cancelledQuantity) { "Total Quantity [$totalQuantity] must be greater than or equal to Cancelled Quantity [$cancelledQuantity]"}
 
-        check(totalQuantity >= executedQuantity + cancelledQuantity) { "Total Quantity [$totalQuantity] must be greater than the total of Executed [$executedQuantity] and Cancelled [$cancelledQuantity] quantities = [${executedQuantity + cancelledQuantity}]" }
+        check(totalQuantity >= usedQuantity) { "Total Quantity [$totalQuantity] must be greater than the total of Executed [$executedQuantity] and Cancelled [$cancelledQuantity] quantities = [${usedQuantity}]" }
     }
 
 }
