@@ -11,11 +11,11 @@ class TradeOrderQuantitiesTest {
     fun `basic quantity is valid`() {
         val orderQuantity = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
         assertAll(
-            { assertEquals(orderQuantity.totalQuantity, BigDecimal.ONE) { "Total Quantity should be equal 1" } },
-            { assertEquals(orderQuantity.openQuantity, BigDecimal.ONE) { "Open Quantity should be equal 1" } },
-            { assertEquals(orderQuantity.executedQuantity, BigDecimal.ZERO) { "Executed Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.cancelledQuantity, BigDecimal.ZERO){ "Cancelled Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.usedQuantity, BigDecimal.ZERO) { "Used Quantity should be equal 0" } }
+            { assertEquals(BigDecimal.ONE, orderQuantity.totalQuantity) { "Total Quantity should be equal 1" } },
+            { assertEquals(BigDecimal.ONE, orderQuantity.openQuantity) { "Open Quantity should be equal 1" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.usedQuantity) { "Used Quantity should be equal 0" } }
         )
     }
 
@@ -23,11 +23,11 @@ class TradeOrderQuantitiesTest {
     fun `basic multi order quantity is valid`() {
         val orderQuantity = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE, newOrderId() to BigDecimal.ONE))
         assertAll(
-            { assertEquals(orderQuantity.totalQuantity, BigDecimal.TWO) { "Total Quantity should be equal 2" } },
-            { assertEquals(orderQuantity.openQuantity, BigDecimal.TWO) { "Open Quantity should be equal 2" } },
-            { assertEquals(orderQuantity.executedQuantity, BigDecimal.ZERO) { "Executed Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.cancelledQuantity, BigDecimal.ZERO){ "Cancelled Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.usedQuantity, BigDecimal.ZERO) { "Used Quantity should be equal 0" } }
+            { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.TWO, orderQuantity.openQuantity) { "Open Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.usedQuantity) { "Used Quantity should be equal 0" } }
         )
     }
 
@@ -38,11 +38,11 @@ class TradeOrderQuantitiesTest {
             mapOf(newTradeId() to BigDecimal.TWO)
         )
         assertAll(
-            { assertEquals(orderQuantity.totalQuantity, BigDecimal.TWO) { "Total Quantity should be equal 2" } },
-            { assertEquals(orderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.executedQuantity, BigDecimal.TWO) { "Executed Quantity should be equal 2" } },
-            { assertEquals(orderQuantity.cancelledQuantity, BigDecimal.ZERO){ "Cancelled Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.usedQuantity, BigDecimal.TWO) { "Used Quantity should be equal 2" } }
+            { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TWO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
 
@@ -53,11 +53,11 @@ class TradeOrderQuantitiesTest {
             mapOf(newTradeId() to BigDecimal.ONE, newTradeId() to BigDecimal.ONE)
         )
         assertAll(
-            { assertEquals(orderQuantity.totalQuantity, BigDecimal.TWO) { "Total Quantity should be equal 2" } },
-            { assertEquals(orderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.executedQuantity, BigDecimal.TWO) { "Executed Quantity should be equal 2" } },
-            { assertEquals(orderQuantity.cancelledQuantity, BigDecimal.ZERO){ "Cancelled Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.usedQuantity, BigDecimal.TWO) { "Used Quantity should be equal 2" } }
+            { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TWO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
 
@@ -68,11 +68,11 @@ class TradeOrderQuantitiesTest {
             mapOf(newTradeId() to BigDecimal.ONE, newTradeId() to BigDecimal.ONE)
         )
         assertAll(
-            { assertEquals(orderQuantity.totalQuantity, BigDecimal.TWO) { "Total Quantity should be equal 2" } },
-            { assertEquals(orderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.executedQuantity, BigDecimal.TWO) { "Executed Quantity should be equal 2" } },
-            { assertEquals(orderQuantity.cancelledQuantity, BigDecimal.ZERO){ "Cancelled Quantity should be equal 0" } },
-            { assertEquals(orderQuantity.usedQuantity, BigDecimal.TWO) { "Used Quantity should be equal 2" } }
+            { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TWO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity){ "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
 
@@ -92,4 +92,11 @@ class TradeOrderQuantitiesTest {
         assertEquals("All Trade Quantities must be greater than 0", exception.message)
     }
 
+    @Test
+    fun `trade too large quantity`() {
+        val exception = assertThrows<IllegalStateException>("Total trade quantity must be less than our equal to total order quantity") {
+            TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE), mapOf(newTradeId() to BigDecimal.TWO))
+        }
+        assertEquals("Total Quantity [1] must be greater than or equal to Executed Quantity [2]", exception.message)
+    }
 }

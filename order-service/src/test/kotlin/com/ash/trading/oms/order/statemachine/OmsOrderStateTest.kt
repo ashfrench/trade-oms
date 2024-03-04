@@ -20,13 +20,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal.TEN) { "Worked Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.ZERO) { "Executed Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.WORKED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.WORKED, updatedState) }
         )
     }
 
@@ -39,13 +39,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal.ZERO) { "Worked Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.ZERO) { "Executed Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.TEN) { "Cancelled Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.CANCELLED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.CANCELLED, updatedState) }
         )
     }
 
@@ -58,8 +58,8 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(orderQuantity, updatedOrderQuantity) },
-            { assertEquals(updatedState, OmsOrderState.NEW) }
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.NEW, updatedState) }
         )
     }
 
@@ -72,8 +72,8 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(orderQuantity, updatedOrderQuantity) },
-            { assertEquals(updatedState, OmsOrderState.NEW) }
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.NEW, updatedState) }
         )
     }
 
@@ -86,13 +86,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal.ZERO) { "Worked Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.TEN) { "Executed Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.EXECUTED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.EXECUTED, updatedState) }
         )
     }
 
@@ -105,13 +105,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal(6)) { "Open Quantity should be equal 6" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal(4)) { "Worked Quantity should be equal 4" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.ZERO) { "Executed Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal(4)) { "Used Quantity should be equal 4" } },
-            { assertEquals(updatedState, OmsOrderState.WORKED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal(6), updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 6" } },
+            { assertEquals(BigDecimal(4), updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 4" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal(4), updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 4" } },
+            { assertEquals(OmsOrderState.WORKED, updatedState) }
         )
     }
 
@@ -124,8 +124,8 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(orderQuantity, updatedOrderQuantity) },
-            { assertEquals(updatedState, OmsOrderState.WORKED) }
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.WORKED, updatedState) }
         )
     }
 
@@ -138,13 +138,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal(8)) { "Worked Quantity should be equal 8" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.TWO) { "Executed Quantity should be equal 2" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.PARTIALLY_EXECUTED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal(8), updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 8" } },
+            { assertEquals(BigDecimal.TWO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.PARTIALLY_EXECUTED, updatedState) }
         )
     }
 
@@ -157,13 +157,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal.ZERO) { "Worked Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.ZERO) { "Executed Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.TEN) { "Cancelled Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.CANCELLED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.CANCELLED, updatedState) }
         )
     }
 
@@ -176,13 +176,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal.ZERO) { "Worked Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.ZERO) { "Executed Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.TEN) { "Cancelled Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.CANCELLED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.CANCELLED, updatedState) }
         )
     }
 
@@ -195,13 +195,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal.ZERO) { "Worked Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.TEN) { "Executed Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.EXECUTED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.EXECUTED, updatedState) }
         )
     }
 
@@ -214,8 +214,8 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(orderQuantity, updatedOrderQuantity) },
-            { assertEquals(updatedState, OmsOrderState.PARTIALLY_EXECUTED) }
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.PARTIALLY_EXECUTED, updatedState) }
         )
     }
 
@@ -228,8 +228,8 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(orderQuantity, updatedOrderQuantity) },
-            { assertEquals(updatedState, OmsOrderState.PARTIALLY_EXECUTED) }
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.PARTIALLY_EXECUTED, updatedState) }
         )
     }
 
@@ -242,13 +242,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal(1)) { "Worked Quantity should be equal 1" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal(9)) { "Executed Quantity should be equal 9" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal.ZERO) { "Cancelled Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.PARTIALLY_EXECUTED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal(1), updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 1" } },
+            { assertEquals(BigDecimal(9), updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 9" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.PARTIALLY_EXECUTED, updatedState) }
         )
     }
 
@@ -261,13 +261,13 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(updatedOrderQuantity.totalQuantity, BigDecimal.TEN) { "Total Quantity should be equal 10" } },
-            { assertEquals(updatedOrderQuantity.openQuantity, BigDecimal.ZERO) { "Open Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.workedQuantity, BigDecimal.ZERO) { "Worked Quantity should be equal 0" } },
-            { assertEquals(updatedOrderQuantity.executedQuantity, BigDecimal.TWO) { "Executed Quantity should be equal 2" } },
-            { assertEquals(updatedOrderQuantity.cancelledQuantity, BigDecimal(8)) { "Cancelled Quantity should be equal 8" } },
-            { assertEquals(updatedOrderQuantity.usedQuantity, BigDecimal.TEN) { "Used Quantity should be equal 10" } },
-            { assertEquals(updatedState, OmsOrderState.CANCELLED) }
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.TWO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
+            { assertEquals(BigDecimal(8), updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 8" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
+            { assertEquals(OmsOrderState.CANCELLED, updatedState) }
         )
     }
 
@@ -280,8 +280,8 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(orderQuantity, updatedOrderQuantity) },
-            { assertEquals(updatedState, OmsOrderState.EXECUTED) }
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.EXECUTED, updatedState) }
         )
     }
 
@@ -294,8 +294,8 @@ class OmsOrderStateTest {
         )
 
         assertAll(
-            { assertEquals(orderQuantity, updatedOrderQuantity) },
-            { assertEquals(updatedState, OmsOrderState.CANCELLED) }
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.CANCELLED, updatedState) }
         )
     }
 
