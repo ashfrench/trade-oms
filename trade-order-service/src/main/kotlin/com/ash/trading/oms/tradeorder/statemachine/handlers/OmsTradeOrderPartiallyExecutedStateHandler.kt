@@ -13,7 +13,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderPartiallyExecutedStateHandler::class.java)
 
-    fun <T> handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent<T>): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
         try {
             when(event) {
                 is AddTradeToTradeOrderEvent -> TODO()

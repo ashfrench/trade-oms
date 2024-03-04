@@ -15,13 +15,13 @@ object OmsTradeOrderNewStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderNewStateHandler::class.java)
 
-    fun <T> handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent<T>): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
         try {
             if(data.usedQuantity != BigDecimal.ZERO) {
                 throw RuntimeException("New Data should have ZERO used quantity")
             }
-            when(event){
-                is AddTradeToTradeOrderEvent -> TODO()
+            return when(event){
+                is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)
                 is CancelTradeOrderEvent -> TODO()
                 is DeleteTradeOrderEvent -> TODO()
             }
@@ -29,6 +29,14 @@ object OmsTradeOrderNewStateHandler {
             logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsTradeOrderState.NEW} state", e)
             return data to OmsTradeOrderState.NEW
         }
+    }
+
+    private fun handleAddTrade(data: TradeOrderQuantities, event: AddTradeToTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        val updatedData = data.copy(
+            tradeQuantities = data.tradeQuantities + mapOf(event.tradeId to event.executedQuantity)
+        )
+
+        return updatedData to OmsTradeOrderState.EXECUTED
     }
 
 }
