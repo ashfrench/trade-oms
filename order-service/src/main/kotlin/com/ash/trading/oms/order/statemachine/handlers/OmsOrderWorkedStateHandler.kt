@@ -13,7 +13,7 @@ object OmsOrderWorkedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
-    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
+    fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): Pair<OrderQuantity, OmsOrderState> {
         return try {
             when (event) {
                 is TraderExecutedEvent -> handleTradeExecution(data, event)
@@ -28,15 +28,15 @@ object OmsOrderWorkedStateHandler {
 
     private fun handleTraderWorkingEvent(data: OrderQuantity, event: TraderWorkingEvent): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
-            workedQuantity = data.workedQuantity + event.payload.workedQuantity
+            workedQuantity = data.workedQuantity + event.workedQuantity
         )
         return updatedData to OmsOrderState.WORKED
     }
 
     private fun handleTradeExecution(data: OrderQuantity, event: TraderExecutedEvent): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
-            executedQuantity = event.payload.executedQuantity,
-            workedQuantity = data.workedQuantity - event.payload.executedQuantity
+            executedQuantity = event.executedQuantity,
+            workedQuantity = data.workedQuantity - event.executedQuantity
         )
 
         return if (updatedData.executedQuantity == updatedData.totalQuantity) {

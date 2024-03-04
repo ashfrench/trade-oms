@@ -12,7 +12,7 @@ object OmsOrderPartiallyExecutedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
-    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
+    fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): Pair<OrderQuantity, OmsOrderState> {
         return try {
             when (event) {
                 is TraderExecutedEvent -> handleTradeExecution(data, event)
@@ -27,8 +27,8 @@ object OmsOrderPartiallyExecutedStateHandler {
 
     private fun handleTradeExecution(data: OrderQuantity, event: TraderExecutedEvent): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
-            executedQuantity = event.payload.executedQuantity + data.executedQuantity,
-            workedQuantity = data.workedQuantity - event.payload.executedQuantity
+            executedQuantity = event.executedQuantity + data.executedQuantity,
+            workedQuantity = data.workedQuantity - event.executedQuantity
         )
 
         return if (updatedData.executedQuantity == updatedData.totalQuantity) {
@@ -46,7 +46,7 @@ object OmsOrderPartiallyExecutedStateHandler {
         return updatedData to OmsOrderState.CANCELLED
     }
 
-    private fun <T> handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
+    private fun handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent): Pair<OrderQuantity, OmsOrderState> {
         logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.PARTIALLY_EXECUTED} state")
         return data to OmsOrderState.PARTIALLY_EXECUTED
     }

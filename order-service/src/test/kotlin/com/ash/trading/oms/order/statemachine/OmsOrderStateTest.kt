@@ -16,7 +16,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.NEW.handleEvent(
             orderQuantity,
-            TraderWorkingEvent(TraderWorkingPayload(newTradeId(), BigDecimal.TEN))
+            TraderWorkingEvent(newTradeId(), BigDecimal.TEN)
         )
 
         assertAll(
@@ -35,7 +35,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.NEW.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(OrderCancelledPayload(LocalDateTime.now()))
+            OrderCancelledEvent(LocalDateTime.now())
         )
 
         assertAll(
@@ -54,7 +54,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.NEW.handleEvent(
             orderQuantity,
-            TraderExecutedEvent(TraderExecutedPayload(newTradeId(), BigDecimal.TEN))
+            TraderExecutedEvent(newTradeId(), BigDecimal.TEN)
         )
 
         assertAll(
@@ -68,7 +68,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.NEW.handleEvent(
             orderQuantity,
-            TraderWorkingEvent(TraderWorkingPayload(newTradeId(), BigDecimal.TEN))
+            TraderWorkingEvent(newTradeId(), BigDecimal.TEN)
         )
 
         assertAll(
@@ -82,7 +82,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
             orderQuantity,
-            TraderExecutedEvent(TraderExecutedPayload(newTradeId(), BigDecimal.TEN))
+            TraderExecutedEvent(newTradeId(), BigDecimal.TEN)
         )
 
         assertAll(
@@ -101,7 +101,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
             orderQuantity,
-            TraderWorkingEvent(TraderWorkingPayload(newTradeId(), BigDecimal.TWO))
+            TraderWorkingEvent(newTradeId(), BigDecimal.TWO)
         )
 
         assertAll(
@@ -120,7 +120,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TWO, workedQuantity = BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
             orderQuantity,
-            TraderWorkingEvent(TraderWorkingPayload(newTradeId(), BigDecimal.TEN))
+            TraderWorkingEvent(newTradeId(), BigDecimal.TEN)
         )
 
         assertAll(
@@ -134,7 +134,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
             orderQuantity,
-            TraderExecutedEvent(TraderExecutedPayload(newTradeId(), BigDecimal.TWO))
+            TraderExecutedEvent(newTradeId(), BigDecimal.TWO)
         )
 
         assertAll(
@@ -153,7 +153,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(OrderCancelledPayload(LocalDateTime.now()))
+            OrderCancelledEvent(LocalDateTime.now())
         )
 
         assertAll(
@@ -172,7 +172,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(OrderCancelledPayload(LocalDateTime.now()))
+            OrderCancelledEvent(LocalDateTime.now())
         )
 
         assertAll(
@@ -191,7 +191,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal(8), executedQuantity = BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
             orderQuantity,
-            TraderExecutedEvent(TraderExecutedPayload(newTradeId(), BigDecimal(8)))
+            TraderExecutedEvent(newTradeId(), BigDecimal(8))
         )
 
         assertAll(
@@ -210,7 +210,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal(8), executedQuantity = BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
             orderQuantity,
-            TraderWorkingEvent(TraderWorkingPayload(newTradeId(), BigDecimal.TEN))
+            TraderWorkingEvent(newTradeId(), BigDecimal.TEN)
         )
 
         assertAll(
@@ -224,7 +224,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal(8), executedQuantity = BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
             orderQuantity,
-            TraderExecutedEvent(TraderExecutedPayload(newTradeId(), BigDecimal.TEN))
+            TraderExecutedEvent(newTradeId(), BigDecimal.TEN)
         )
 
         assertAll(
@@ -238,7 +238,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal(8), executedQuantity = BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
             orderQuantity,
-            TraderExecutedEvent(TraderExecutedPayload(newTradeId(), BigDecimal(7)))
+            TraderExecutedEvent(newTradeId(), BigDecimal(7))
         )
 
         assertAll(
@@ -257,7 +257,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal(8), executedQuantity = BigDecimal.TWO)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(OrderCancelledPayload(LocalDateTime.now()))
+            OrderCancelledEvent(LocalDateTime.now())
         )
 
         assertAll(
@@ -276,7 +276,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.EXECUTED.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(OrderCancelledPayload(LocalDateTime.now()))
+            OrderCancelledEvent(LocalDateTime.now())
         )
 
         assertAll(
@@ -290,7 +290,7 @@ class OmsOrderStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.CANCELLED.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(OrderCancelledPayload(LocalDateTime.now()))
+            OrderCancelledEvent(LocalDateTime.now())
         )
 
         assertAll(

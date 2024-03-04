@@ -9,7 +9,7 @@ object OmsOrderExecutedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderCancelledStateHandler::class.java)
 
-    fun <T> handleEvent(data: OrderQuantity, event: OmsOrderEvent<T>): Pair<OrderQuantity, OmsOrderState> {
+    fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): Pair<OrderQuantity, OmsOrderState> {
         logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.EXECUTED} state")
         return data to OmsOrderState.EXECUTED
     }
