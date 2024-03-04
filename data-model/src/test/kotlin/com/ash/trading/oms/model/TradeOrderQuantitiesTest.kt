@@ -27,4 +27,12 @@ class TradeOrderQuantitiesTest {
         assertEquals("All Order Quantities must be greater than 0", exception.message)
     }
 
+    @Test
+    fun `invalid trade quantity`() {
+        val exception = assertThrows<IllegalStateException>("All Trade Quantities must be greater than 0") {
+            TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE), mapOf(newTradeId() to BigDecimal(-1)))
+        }
+        assertEquals("All Trade Quantities must be greater than 0", exception.message)
+    }
+
 }
