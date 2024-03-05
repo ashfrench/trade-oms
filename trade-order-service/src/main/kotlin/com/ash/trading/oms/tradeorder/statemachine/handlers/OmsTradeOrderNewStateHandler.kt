@@ -34,7 +34,13 @@ object OmsTradeOrderNewStateHandler {
             tradeQuantities = data.tradeQuantities + mapOf(event.tradeId to event.executedQuantity)
         )
 
-        return updatedData to OmsTradeOrderState.EXECUTED
+        val updateState = if (updatedData.openQuantity == BigDecimal.ZERO) {
+            OmsTradeOrderState.EXECUTED
+        } else {
+            OmsTradeOrderState.PARTIALLY_EXECUTED
+        }
+
+        return updatedData to updateState
     }
 
 }
