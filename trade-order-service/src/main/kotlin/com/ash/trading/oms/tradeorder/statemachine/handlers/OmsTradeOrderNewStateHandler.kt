@@ -4,7 +4,6 @@ import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
 import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
 import com.ash.trading.oms.tradeorder.statemachine.event.CancelTradeOrderEvent
-import com.ash.trading.oms.tradeorder.statemachine.event.DeleteTradeOrderEvent
 import com.ash.trading.oms.tradeorder.statemachine.event.OmsTradeOrderEvent
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
@@ -15,13 +14,12 @@ object OmsTradeOrderNewStateHandler {
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
         try {
-            if(data.usedQuantity != BigDecimal.ZERO) {
+            if (data.usedQuantity != BigDecimal.ZERO) {
                 throw RuntimeException("New Data should have ZERO used quantity")
             }
-            return when(event) {
+            return when (event) {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)
-                is CancelTradeOrderEvent -> TODO()
-                is DeleteTradeOrderEvent -> TODO()
+                is CancelTradeOrderEvent -> handleCancelTrade(data, event)
             }
         } catch (e: Exception) {
             logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsTradeOrderState.NEW} state", e)
@@ -43,4 +41,8 @@ object OmsTradeOrderNewStateHandler {
         return updatedData to updateState
     }
 
+    private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        val updatedData = data.copy(cancelledQuantity = data.openQuantity)
+        return updatedData to OmsTradeOrderState.CANCELLED
+    }
 }
