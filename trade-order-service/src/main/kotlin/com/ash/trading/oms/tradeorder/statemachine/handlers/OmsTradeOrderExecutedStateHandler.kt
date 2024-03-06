@@ -5,20 +5,18 @@ import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 
-object OmsTradeOrderPartiallyExecutedStateHandler {
+object OmsTradeOrderExecutedStateHandler {
 
-    private val logger = LoggerFactory.getLogger(OmsTradeOrderPartiallyExecutedStateHandler::class.java)
+    private val logger = LoggerFactory.getLogger(OmsTradeOrderExecutedStateHandler::class.java)
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
         try {
             when(event) {
                 is AddTradeToTradeOrderEvent -> TODO()
                 is CancelTradeOrderEvent -> TODO()
+                is AddOrderToTradeOrderEvent -> TODO()
+                is RemoveOrderFromTradeOrderEvent -> TODO()
                 is RemoveTradeFromTradeOrderEvent -> TODO()
-                else -> {
-                    logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsTradeOrderState.PARTIALLY_EXECUTED} state")
-                    return data to OmsTradeOrderState.PARTIALLY_EXECUTED
-                }
             }
         } catch (e: Exception) {
             logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from ${OmsTradeOrderState.PARTIALLY_EXECUTED} state", e)
