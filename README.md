@@ -1,1 +1,3 @@
 # trade-oms
+
+`./gradlew build`
