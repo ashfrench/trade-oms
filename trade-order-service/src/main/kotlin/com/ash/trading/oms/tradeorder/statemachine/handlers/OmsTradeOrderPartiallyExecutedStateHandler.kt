@@ -16,12 +16,12 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
                 is CancelTradeOrderEvent -> TODO()
                 is RemoveTradeFromTradeOrderEvent -> TODO()
                 else -> {
-                    logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsTradeOrderState.PARTIALLY_EXECUTED} state")
+                    logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.PARTIALLY_EXECUTED}] state")
                     return data to OmsTradeOrderState.PARTIALLY_EXECUTED
                 }
             }
         } catch (e: Exception) {
-            logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from ${OmsTradeOrderState.PARTIALLY_EXECUTED} state", e)
+            logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.PARTIALLY_EXECUTED}] state", e)
             return data to OmsTradeOrderState.PARTIALLY_EXECUTED
         }
     }

@@ -15,12 +15,14 @@ object OmsTradeOrderExecutedStateHandler {
                 is AddTradeToTradeOrderEvent -> TODO()
                 is CancelTradeOrderEvent -> TODO()
                 is AddOrderToTradeOrderEvent -> TODO()
-                is RemoveOrderFromTradeOrderEvent -> TODO()
-                is RemoveTradeFromTradeOrderEvent -> TODO()
+                else -> {
+                    logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.EXECUTED}] state")
+                    return data to OmsTradeOrderState.EXECUTED
+                }
             }
         } catch (e: Exception) {
-            logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from ${OmsTradeOrderState.PARTIALLY_EXECUTED} state", e)
-            return data to OmsTradeOrderState.PARTIALLY_EXECUTED
+            logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.EXECUTED}] state", e)
+            return data to OmsTradeOrderState.EXECUTED
         }
     }
 
