@@ -29,7 +29,7 @@ object OmsTradeOrderNewStateHandler {
     }
 
     private fun handleAddTrade(data: TradeOrderQuantities, event: AddTradeToTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
-        if (event.executedQuantity >= BigDecimal.ZERO) {
+        if (event.executedQuantity < BigDecimal.ZERO) {
             throw RuntimeException("Executed Quantity added must be a positive value")
         }
         val updatedData = data.copy(
@@ -46,7 +46,7 @@ object OmsTradeOrderNewStateHandler {
     }
 
     private fun handleAddOrderEvent(data: TradeOrderQuantities, event: AddOrderToTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
-        if (event.workedQuantity >= BigDecimal.ZERO) {
+        if (event.workedQuantity < BigDecimal.ZERO) {
             throw RuntimeException("Worked Quantity added must be a positive value")
         }
         val updatedData = data.copy(
