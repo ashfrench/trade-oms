@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.22"
+    alias(myplugins.plugins.kotlin)
 }
 
 group = "com.ash.trading.oms"

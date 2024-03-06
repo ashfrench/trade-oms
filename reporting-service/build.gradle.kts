@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    alias(myplugins.plugins.kotlin)
 }
 
 group = "com.ash.trading.oms"
