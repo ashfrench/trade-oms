@@ -3,6 +3,7 @@ package com.ash.trading.oms.tradeorder.statemachine
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.model.newOrderId
 import com.ash.trading.oms.model.newTradeId
+import com.ash.trading.oms.tradeorder.statemachine.event.AddOrderToTradeOrderEvent
 import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -45,6 +46,24 @@ class OmsTradeOrderStateTest {
             { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
             { assertEquals(OmsTradeOrderState.PARTIALLY_EXECUTED, updatedState) }
+        )
+    }
+
+    @Test
+    fun `can add new order to trade order`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            AddOrderToTradeOrderEvent(newOrderId(), BigDecimal.ONE)
+        )
+
+        assertAll(
+            { assertEquals(BigDecimal.TWO, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.TWO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 2" } },
+            { assertEquals(OmsTradeOrderState.NEW, updatedState) }
         )
     }
 
