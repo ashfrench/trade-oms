@@ -21,6 +21,7 @@ object OmsTradeOrderNewStateHandler {
                 is CancelTradeOrderEvent -> handleCancelTrade(data, event)
                 is RemoveOrderFromTradeOrderEvent -> TODO()
                 is RemoveTradeFromTradeOrderEvent -> TODO()
+                is UpdateOrderForTradeOrderEvent -> TODO()
             }
         } catch (e: Exception) {
             logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.NEW}] state", e)
