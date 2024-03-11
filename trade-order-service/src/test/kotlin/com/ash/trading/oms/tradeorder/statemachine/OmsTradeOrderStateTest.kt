@@ -101,4 +101,18 @@ class OmsTradeOrderStateTest {
         )
     }
 
+    @Test
+    fun `invalid order leaves order in new`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TWO))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
+                tradeOrderQuantities,
+                AddTradeToTradeOrderEvent(newTradeId(), BigDecimal(-1))
+        )
+
+        assertAll(
+                { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+                { assertEquals(OmsTradeOrderState.NEW, updatedState) }
+        )
+    }
+
 }
