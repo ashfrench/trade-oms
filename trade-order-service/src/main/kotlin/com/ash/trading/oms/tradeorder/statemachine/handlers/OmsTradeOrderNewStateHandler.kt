@@ -21,7 +21,7 @@ object OmsTradeOrderNewStateHandler {
                 is CancelTradeOrderEvent -> handleCancelTrade(data, event)
                 is RemoveOrderFromTradeOrderEvent -> TODO()
                 is RemoveTradeFromTradeOrderEvent -> TODO()
-                is UpdateOrderForTradeOrderEvent -> TODO()
+                is UpdateOrderForTradeOrderEvent -> handleUpdateOrderEvent(data, event)
             }
         } catch (e: Exception) {
             logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.NEW}] state", e)
@@ -53,6 +53,22 @@ object OmsTradeOrderNewStateHandler {
         val updatedData = data.copy(
             orderQuantities = data.orderQuantities + mapOf(event.orderId to event.workedQuantity)
         )
+        return updatedData to OmsTradeOrderState.NEW
+    }
+
+    private fun handleUpdateOrderEvent(data: TradeOrderQuantities, event: UpdateOrderForTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        if (event.workedQuantity < BigDecimal.ZERO) {
+            throw RuntimeException("Worked Quantity added must be a positive value")
+        }
+
+        if (!data.orderQuantities.containsKey(event.orderId)) {
+            throw RuntimeException("Order ${event.orderId} is not in this Trade Order")
+        }
+
+        val updatedOrderQuantities = data.orderQuantities.toMutableMap()
+        updatedOrderQuantities[event.orderId] = event.workedQuantity
+
+        val updatedData = data.copy(orderQuantities = updatedOrderQuantities)
         return updatedData to OmsTradeOrderState.NEW
     }
 
