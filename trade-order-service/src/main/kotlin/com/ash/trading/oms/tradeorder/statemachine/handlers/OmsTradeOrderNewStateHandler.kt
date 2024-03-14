@@ -47,6 +47,10 @@ object OmsTradeOrderNewStateHandler {
     }
 
     private fun handleAddOrderEvent(data: TradeOrderQuantities, event: AddOrderToTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        if (data.orderQuantities.containsKey(event.orderId)) {
+            throw RuntimeException("Must not add OrderId[${event.orderId}] that already exists in the Trade Order")
+        }
+
         if (event.workedQuantity < BigDecimal.ZERO) {
             throw RuntimeException("Worked Quantity added must be a positive value")
         }

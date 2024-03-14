@@ -123,6 +123,25 @@ class OmsTradeOrderStateTest {
     }
 
     @Test
+    fun `invalid add new order to trade order cannot add order twice`() {
+        val orderId = newOrderId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(orderId to BigDecimal.TWO))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            AddOrderToTradeOrderEvent(orderId, BigDecimal.ONE)
+        )
+
+        assertAll(
+            { assertEquals(BigDecimal.TWO, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.TWO, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 2" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 2" } },
+            { assertEquals(OmsTradeOrderState.NEW, updatedState) }
+        )
+    }
+
+    @Test
     fun `invalid trade leaves order in new`() {
         val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TWO))
         val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
