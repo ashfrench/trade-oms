@@ -19,7 +19,7 @@ object OmsTradeOrderNewStateHandler {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)
                 is AddOrderToTradeOrderEvent -> handleAddOrderEvent(data, event)
                 is CancelTradeOrderEvent -> handleCancelTrade(data, event)
-                is RemoveOrderFromTradeOrderEvent -> TODO()
+                is RemoveOrderFromTradeOrderEvent -> handleRemoveOrderEvent(data, event)
                 is RemoveTradeFromTradeOrderEvent -> TODO()
                 is UpdateOrderForTradeOrderEvent -> handleUpdateOrderEvent(data, event)
             }
@@ -73,6 +73,16 @@ object OmsTradeOrderNewStateHandler {
         updatedOrderQuantities[event.orderId] = event.workedQuantity
 
         val updatedData = data.copy(orderQuantities = updatedOrderQuantities)
+        return updatedData to OmsTradeOrderState.NEW
+    }
+
+    private fun handleRemoveOrderEvent(data: TradeOrderQuantities, event: RemoveOrderFromTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        val updatedOrderQuantities = data.orderQuantities.toMutableMap()
+        updatedOrderQuantities.remove(event.orderId)
+
+        val updatedData = data.copy(
+            orderQuantities = updatedOrderQuantities
+        )
         return updatedData to OmsTradeOrderState.NEW
     }
 

@@ -17,6 +17,7 @@ data class TradeOrderQuantities(
     }
 
     private fun validate() {
+        check(orderQuantities.isNotEmpty()) { "Must contain some orders" }
         check(orderQuantities.all { it.value > BigDecimal.ZERO }) { "All Order Quantities must be greater than 0"}
         check(tradeQuantities.all { it.value > BigDecimal.ZERO }) { "All Trade Quantities must be greater than 0"}
         check(cancelledQuantity >= BigDecimal.ZERO) { "Cancelled Quantity [$cancelledQuantity] must be greater than or equal to 0"}

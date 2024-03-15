@@ -3,12 +3,8 @@ package com.ash.trading.oms.tradeorder.statemachine
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.model.newOrderId
 import com.ash.trading.oms.model.newTradeId
-import com.ash.trading.oms.tradeorder.statemachine.event.AddOrderToTradeOrderEvent
-import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
-import com.ash.trading.oms.tradeorder.statemachine.event.CancelTradeOrderEvent
-import com.ash.trading.oms.tradeorder.statemachine.event.UpdateOrderForTradeOrderEvent
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.ash.trading.oms.tradeorder.statemachine.event.*
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -104,6 +100,41 @@ class OmsTradeOrderStateTest {
             { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 2" } },
             { assertEquals(BigDecimal.TWO, updatedOrderQuantity.orderQuantities[orderId]) { "Order Quantity should be equal 2" } },
+            { assertEquals(OmsTradeOrderState.NEW, updatedState) }
+        )
+    }
+
+    @Test
+    fun `can remove order from trade order`() {
+        val orderId = newOrderId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(orderId to BigDecimal.ONE, newOrderId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            RemoveOrderFromTradeOrderEvent(orderId)
+        )
+
+        assertAll(
+            { assertEquals(BigDecimal.ONE, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 1" } },
+            { assertEquals(BigDecimal.ONE, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 1" } },
+            { assertNull(updatedOrderQuantity.orderQuantities[orderId]) { "Order should be removed" } },
+            { assertEquals(OmsTradeOrderState.NEW, updatedState) }
+        )
+    }
+
+    @Test
+    fun `remove order which does not exist has no effect on trade order`() {
+        val orderId = newOrderId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            RemoveOrderFromTradeOrderEvent(orderId)
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
             { assertEquals(OmsTradeOrderState.NEW, updatedState) }
         )
     }
