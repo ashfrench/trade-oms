@@ -15,6 +15,7 @@ object OmsTradeOrderExecutedStateHandler {
                 is AddTradeToTradeOrderEvent -> TODO()
                 is CancelTradeOrderEvent -> TODO()
                 is AddOrderToTradeOrderEvent -> TODO()
+                is UpdateTradeForTradeOrderEvent -> TODO()
                 else -> {
                     logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.EXECUTED}] state")
                     return data to OmsTradeOrderState.EXECUTED
