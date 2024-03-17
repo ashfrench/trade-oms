@@ -20,13 +20,13 @@ data class OrderQuantity(
         check(totalQuantity > BigDecimal.ZERO) { "Total Quantity [$totalQuantity] must be greater than 0"}
         check(workedQuantity >= BigDecimal.ZERO) { "Worked Quantity [$workedQuantity] must be greater than or equal to 0"}
         check(executedQuantity >= BigDecimal.ZERO) { "Executed Quantity [$executedQuantity] must be greater than or equal to 0"}
-        check(cancelledQuantity >= BigDecimal.ZERO) { "Cancelled Quantity [$cancelledQuantity] must be greater than or equal to 0"}
+        check(cancelledQuantity >= BigDecimal.ZERO) { "Cancelled Quantity [${cancelledQuantity.quantity}] must be greater than or equal to 0"}
 
         check(totalQuantity >= executedQuantity) { "Total Quantity [$totalQuantity] must be greater than or equal to Executed Quantity [$executedQuantity]"}
         check(totalQuantity >= workedQuantity) { "Total Quantity [$totalQuantity] must be greater than or equal to Worked Quantity [$workedQuantity]"}
-        check(totalQuantity >= cancelledQuantity) { "Total Quantity [$totalQuantity] must be greater than or equal to Cancelled Quantity [$cancelledQuantity]"}
+        check(totalQuantity >= cancelledQuantity) { "Total Quantity [$totalQuantity] must be greater than or equal to Cancelled Quantity [${cancelledQuantity.quantity}]"}
 
-        check(totalQuantity >= executedQuantity + workedQuantity + cancelledQuantity) { "Total Quantity [$totalQuantity] must be greater than the total of Executed [$executedQuantity], Worked Quantity [$workedQuantity] and Cancelled [$cancelledQuantity] quantities = [${executedQuantity + workedQuantity + cancelledQuantity}]" }
+        check(totalQuantity >= executedQuantity + workedQuantity + cancelledQuantity) { "Total Quantity [$totalQuantity] must be greater than the total of Executed [$executedQuantity], Worked Quantity [$workedQuantity] and Cancelled [${cancelledQuantity.quantity}] quantities = [${executedQuantity + workedQuantity + cancelledQuantity}]" }
     }
 }
 
@@ -47,7 +47,8 @@ data class CancelledQuantity(val quantity: BigDecimal, val cancelledTime: LocalD
     }
 
     private fun validate() {
-        check(quantity > BigDecimal.ZERO && cancelledTime != null ) { "Cancelled Time Must not be null when cancelled quantity is set"}
+        check(quantity >= BigDecimal.ZERO) { "Cancelled Quantity [${quantity}] must be greater than or equal to 0"}
+        check((quantity > BigDecimal.ZERO && cancelledTime != null) || (quantity == BigDecimal.ZERO && cancelledTime == null) ) { "Cancelled Time Must not be null when cancelled quantity is set"}
     }
 
 

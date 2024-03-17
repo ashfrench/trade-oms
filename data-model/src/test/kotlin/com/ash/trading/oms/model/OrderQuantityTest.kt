@@ -17,7 +17,7 @@ class OrderQuantityTest {
             { assertEquals(BigDecimal.ONE, orderQuantity.openQuantity) { "Open Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.usedQuantity) { "Used Quantity should be equal 0" } }
         )
     }
@@ -30,7 +30,7 @@ class OrderQuantityTest {
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.workedQuantity) { "Worked Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.usedQuantity) { "Used Quantity should be equal 1" } }
         )
     }
@@ -43,20 +43,23 @@ class OrderQuantityTest {
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.usedQuantity) { "Used Quantity should be equal 1" } }
         )
     }
 
     @Test
     fun `cancelled quantity`() {
-        val orderQuantity = OrderQuantity(BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
+        val cancelledTime = LocalDateTime.now()
+        val orderQuantity = OrderQuantity(BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE,
+            cancelledTime
+        ))
         assertAll(
             { assertEquals(BigDecimal.ONE, orderQuantity.totalQuantity) { "Total Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
-            { assertEquals(BigDecimal.ONE, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ONE, cancelledTime), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.usedQuantity) { "Used Quantity should be equal 1" } }
         )
     }
@@ -69,33 +72,39 @@ class OrderQuantityTest {
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.workedQuantity) { "Worked Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
 
     @Test
     fun `partial worked partial cancelled`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TWO, workedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
+        val cancelledTime = LocalDateTime.now()
+        val orderQuantity = OrderQuantity(BigDecimal.TWO, workedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE,
+            cancelledTime
+        ))
         assertAll(
             { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.workedQuantity) { "Worked Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
-            { assertEquals(BigDecimal.ONE, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ONE, cancelledTime), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
 
     @Test
     fun `partial executed partial cancelled`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TWO, executedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
+        val cancelledTime = LocalDateTime.now()
+        val orderQuantity = OrderQuantity(BigDecimal.TWO, executedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE,
+            cancelledTime
+        ))
         assertAll(
             { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
-            { assertEquals(BigDecimal.ONE, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ONE, cancelledTime), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
@@ -108,33 +117,39 @@ class OrderQuantityTest {
             { assertEquals(BigDecimal(8), orderQuantity.openQuantity) { "Open Quantity should be equal 8" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.workedQuantity) { "Worked Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
-            { assertEquals(BigDecimal.ZERO, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
 
     @Test
     fun `partial worked partial cancelled with open quantity`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
+        val cancelledTime = LocalDateTime.now()
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE,
+            cancelledTime
+        ))
         assertAll(
             { assertEquals(BigDecimal.TEN, orderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
             { assertEquals(BigDecimal(8), orderQuantity.openQuantity) { "Open Quantity should be equal 8" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.workedQuantity) { "Worked Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
-            { assertEquals(BigDecimal.ONE, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ONE, cancelledTime), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
 
     @Test
     fun `partial executed partial cancelled with open quantity`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
+        val cancelledTime = LocalDateTime.now()
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE,
+            cancelledTime
+        ))
         assertAll(
             { assertEquals(BigDecimal.TEN, orderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
             { assertEquals(BigDecimal(8), orderQuantity.openQuantity) { "Open Quantity should be equal 8" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.workedQuantity) { "Worked Quantity should be equal 0" } },
             { assertEquals(BigDecimal.ONE, orderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
-            { assertEquals(BigDecimal.ONE, orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ONE, cancelledTime), orderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 1" } },
             { assertEquals(BigDecimal.TWO, orderQuantity.usedQuantity) { "Used Quantity should be equal 2" } }
         )
     }
@@ -171,7 +186,7 @@ class OrderQuantityTest {
 
     @Test
     fun `invalid negative cancelled quantity`() {
-        val exception = assertThrows<IllegalStateException>("Cancelled Quantity Is Less Than Zero") { OrderQuantity(BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal(-1))) }
+        val exception = assertThrows<IllegalStateException>("Cancelled Quantity Is Less Than Zero") { OrderQuantity(BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal(-1), LocalDateTime.now())) }
         assertEquals("Cancelled Quantity [-1] must be greater than or equal to 0", exception.message)
     }
 
