@@ -1,5 +1,6 @@
 package com.ash.trading.oms.order.statemachine.handlers
 
+import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.order.statemachine.OmsOrderState
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
@@ -17,7 +18,7 @@ object OmsOrderWorkedStateHandler {
         return try {
             when (event) {
                 is TraderExecutedEvent -> handleTradeExecution(data, event)
-                is OrderCancelledEvent -> handleOrderCancellation(data)
+                is OrderCancelledEvent -> handleOrderCancellation(data, event)
                 is TraderWorkingEvent -> handleTraderWorkingEvent(data, event)
             }
         } catch (e: Exception) {
@@ -46,9 +47,9 @@ object OmsOrderWorkedStateHandler {
         }
     }
 
-    private fun handleOrderCancellation(data: OrderQuantity): Pair<OrderQuantity, OmsOrderState> {
+    private fun handleOrderCancellation(data: OrderQuantity, event: OrderCancelledEvent): Pair<OrderQuantity, OmsOrderState> {
         val updatedData = data.copy(
-            cancelledQuantity = data.workedQuantity + data.openQuantity,
+            cancelledQuantity = CancelledQuantity(data.workedQuantity + data.openQuantity, event.cancelledTime),
             workedQuantity = BigDecimal.ZERO
         )
         return updatedData to OmsOrderState.CANCELLED

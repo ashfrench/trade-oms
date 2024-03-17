@@ -1,5 +1,6 @@
 package com.ash.trading.oms.tradeorder.statemachine.handlers
 
+import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
 import com.ash.trading.oms.tradeorder.statemachine.event.*
@@ -20,9 +21,11 @@ object OmsTradeOrderNewStateHandler {
                 is AddOrderToTradeOrderEvent -> handleAddOrderEvent(data, event)
                 is CancelTradeOrderEvent -> handleCancelTrade(data, event)
                 is RemoveOrderFromTradeOrderEvent -> handleRemoveOrderEvent(data, event)
-                is RemoveTradeFromTradeOrderEvent -> TODO()
                 is UpdateOrderForTradeOrderEvent -> handleUpdateOrderEvent(data, event)
-                is UpdateTradeForTradeOrderEvent -> TODO()
+                else -> {
+                    logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.NEW}] state")
+                    return data to OmsTradeOrderState.NEW
+                }
             }
         } catch (e: Exception) {
             logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.NEW}] state", e)
@@ -88,7 +91,7 @@ object OmsTradeOrderNewStateHandler {
     }
 
     private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
-        val updatedData = data.copy(cancelledQuantity = data.openQuantity)
+        val updatedData = data.copy(cancelledQuantity = CancelledQuantity(data.openQuantity, event.cancelledTime))
         return updatedData to OmsTradeOrderState.CANCELLED
     }
 }

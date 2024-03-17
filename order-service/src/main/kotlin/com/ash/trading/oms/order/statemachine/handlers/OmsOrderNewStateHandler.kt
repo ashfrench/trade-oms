@@ -1,11 +1,13 @@
 package com.ash.trading.oms.order.statemachine.handlers
 
+import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.order.statemachine.OmsOrderState
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
 import com.ash.trading.oms.order.statemachine.events.TraderWorkingEvent
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
 
 object OmsOrderNewStateHandler {
 
@@ -14,7 +16,7 @@ object OmsOrderNewStateHandler {
     fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): Pair<OrderQuantity, OmsOrderState> {
         return try {
             when (event) {
-                is OrderCancelledEvent -> handleOrderCancelledEvent(data)
+                is OrderCancelledEvent -> handleOrderCancelledEvent(data, event)
                 is TraderWorkingEvent -> handleTraderWorkingEvent(data, event)
                 else -> handleUnplannedEvent(data, event)
             }
@@ -24,8 +26,8 @@ object OmsOrderNewStateHandler {
         }
     }
 
-    private fun handleOrderCancelledEvent(data: OrderQuantity): Pair<OrderQuantity, OmsOrderState> {
-        val updatedData = data.copy(cancelledQuantity = data.totalQuantity)
+    private fun handleOrderCancelledEvent(data: OrderQuantity, event: OrderCancelledEvent): Pair<OrderQuantity, OmsOrderState> {
+        val updatedData = data.copy(cancelledQuantity = CancelledQuantity(data.totalQuantity, event.cancelledTime))
         return updatedData to OmsOrderState.CANCELLED
     }
 

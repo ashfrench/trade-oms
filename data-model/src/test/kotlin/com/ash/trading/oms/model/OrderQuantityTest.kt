@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 class OrderQuantityTest {
 
@@ -49,7 +50,7 @@ class OrderQuantityTest {
 
     @Test
     fun `cancelled quantity`() {
-        val orderQuantity = OrderQuantity(BigDecimal.ONE, cancelledQuantity = BigDecimal.ONE)
+        val orderQuantity = OrderQuantity(BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
         assertAll(
             { assertEquals(BigDecimal.ONE, orderQuantity.totalQuantity) { "Total Quantity should be equal 1" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
@@ -75,7 +76,7 @@ class OrderQuantityTest {
 
     @Test
     fun `partial worked partial cancelled`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TWO, workedQuantity = BigDecimal.ONE, cancelledQuantity = BigDecimal.ONE)
+        val orderQuantity = OrderQuantity(BigDecimal.TWO, workedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
         assertAll(
             { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
@@ -88,7 +89,7 @@ class OrderQuantityTest {
 
     @Test
     fun `partial executed partial cancelled`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TWO, executedQuantity = BigDecimal.ONE, cancelledQuantity = BigDecimal.ONE)
+        val orderQuantity = OrderQuantity(BigDecimal.TWO, executedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
         assertAll(
             { assertEquals(BigDecimal.TWO, orderQuantity.totalQuantity) { "Total Quantity should be equal 2" } },
             { assertEquals(BigDecimal.ZERO, orderQuantity.openQuantity) { "Open Quantity should be equal 0" } },
@@ -114,7 +115,7 @@ class OrderQuantityTest {
 
     @Test
     fun `partial worked partial cancelled with open quantity`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.ONE, cancelledQuantity = BigDecimal.ONE)
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
         assertAll(
             { assertEquals(BigDecimal.TEN, orderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
             { assertEquals(BigDecimal(8), orderQuantity.openQuantity) { "Open Quantity should be equal 8" } },
@@ -127,7 +128,7 @@ class OrderQuantityTest {
 
     @Test
     fun `partial executed partial cancelled with open quantity`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.ONE, cancelledQuantity = BigDecimal.ONE)
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.ONE, LocalDateTime.now()))
         assertAll(
             { assertEquals(BigDecimal.TEN, orderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
             { assertEquals(BigDecimal(8), orderQuantity.openQuantity) { "Open Quantity should be equal 8" } },
@@ -164,19 +165,19 @@ class OrderQuantityTest {
 
     @Test
     fun `invalid positive cancelled quantity`() {
-        val exception = assertThrows<IllegalStateException>("Cancelled Quantity Is Bigger Than Total Quantity") { OrderQuantity(BigDecimal.ONE, cancelledQuantity = BigDecimal.TWO) }
+        val exception = assertThrows<IllegalStateException>("Cancelled Quantity Is Bigger Than Total Quantity") { OrderQuantity(BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal.TWO, LocalDateTime.now())) }
         assertEquals("Total Quantity [1] must be greater than or equal to Cancelled Quantity [2]", exception.message)
     }
 
     @Test
     fun `invalid negative cancelled quantity`() {
-        val exception = assertThrows<IllegalStateException>("Cancelled Quantity Is Less Than Zero") { OrderQuantity(BigDecimal.ONE, cancelledQuantity = BigDecimal(-1)) }
+        val exception = assertThrows<IllegalStateException>("Cancelled Quantity Is Less Than Zero") { OrderQuantity(BigDecimal.ONE, cancelledQuantity = CancelledQuantity(BigDecimal(-1))) }
         assertEquals("Cancelled Quantity [-1] must be greater than or equal to 0", exception.message)
     }
 
     @Test
     fun `used quantity exceeds total quantity`() {
-        val exception = assertThrows<IllegalStateException>("Used Quantity Is Greater Than Total") { OrderQuantity(BigDecimal.TWO, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE) }
+        val exception = assertThrows<IllegalStateException>("Used Quantity Is Greater Than Total") { OrderQuantity(BigDecimal.TWO, BigDecimal.ONE, BigDecimal.ONE, CancelledQuantity(BigDecimal.ONE, LocalDateTime.now())) }
         assertEquals("Total Quantity [2] must be greater than the total of Executed [1], Worked Quantity [1] and Cancelled [1] quantities = [3]", exception.message)
     }
 

@@ -125,6 +125,34 @@ class OmsTradeOrderStateTest {
     }
 
     @Test
+    fun `new trade order has no trades to remove from trade order`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            RemoveTradeFromTradeOrderEvent(newTradeId())
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.NEW, updatedState) }
+        )
+    }
+
+    @Test
+    fun `new trade order has no trades to update for trade order`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            UpdateTradeForTradeOrderEvent(newTradeId(), BigDecimal.ONE)
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.NEW, updatedState) }
+        )
+    }
+
+    @Test
     fun `remove order which does not exist has no effect on trade order`() {
         val orderId = newOrderId()
         val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
