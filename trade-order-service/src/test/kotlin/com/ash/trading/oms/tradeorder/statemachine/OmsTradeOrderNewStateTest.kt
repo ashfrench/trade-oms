@@ -127,6 +127,21 @@ class OmsTradeOrderNewStateTest {
     }
 
     @Test
+    fun `can remove order from trade order leaving trade order empty`() {
+        val orderId = newOrderId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(orderId to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            RemoveOrderFromTradeOrderEvent(orderId)
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.DELETED, updatedState) }
+        )
+    }
+
+    @Test
     fun `new trade order has no trades to remove from trade order`() {
         val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
         val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.NEW.handleEvent(

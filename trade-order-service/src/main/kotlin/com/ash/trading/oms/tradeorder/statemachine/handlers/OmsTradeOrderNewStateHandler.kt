@@ -84,10 +84,14 @@ object OmsTradeOrderNewStateHandler {
         val updatedOrderQuantities = data.orderQuantities.toMutableMap()
         updatedOrderQuantities.remove(event.orderId)
 
-        val updatedData = data.copy(
-            orderQuantities = updatedOrderQuantities
-        )
-        return updatedData to OmsTradeOrderState.NEW
+        return if (updatedOrderQuantities.isEmpty()) {
+            data to OmsTradeOrderState.DELETED
+        } else {
+            val updatedData = data.copy(
+                orderQuantities = updatedOrderQuantities
+            )
+            updatedData to OmsTradeOrderState.NEW
+        }
     }
 
     private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
