@@ -32,9 +32,11 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
         if (event.executedQuantity < BigDecimal.ZERO) {
             throw RuntimeException("Executed Quantity added must be a positive value")
         }
-        val updatedData = data.copy(
-            tradeQuantities = data.tradeQuantities + mapOf(event.tradeId to event.executedQuantity)
-        )
+
+        val updatedQuantities = data.tradeQuantities.toMutableMap()
+        updatedQuantities.computeIfAbsent(event.tradeId) { event.executedQuantity }
+
+        val updatedData = data.copy(tradeQuantities = updatedQuantities)
 
         val updateState = if (updatedData.openQuantity == BigDecimal.ZERO) {
             OmsTradeOrderState.EXECUTED

@@ -31,4 +31,19 @@ class OmsTradeOrderPartiallyExecutedStateTest {
         )
     }
 
+    @Test
+    fun `unable to add same trade again in partially executed`() {
+        val tradeId = newTradeId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(tradeId to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.PARTIALLY_EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            AddTradeToTradeOrderEvent(tradeId, BigDecimal(9))
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.PARTIALLY_EXECUTED, updatedState) }
+        )
+    }
+
 }
