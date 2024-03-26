@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-class OmsTradeOrderStateTest {
+class OmsTradeOrderNewStateTest {
 
 
     @Test
