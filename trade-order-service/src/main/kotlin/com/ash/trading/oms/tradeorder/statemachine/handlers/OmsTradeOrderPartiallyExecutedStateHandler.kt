@@ -34,7 +34,12 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
         }
 
         val updatedQuantities = data.tradeQuantities.toMutableMap()
-        updatedQuantities.computeIfAbsent(event.tradeId) { event.executedQuantity }
+        updatedQuantities.compute(event.tradeId) { tradeId, originalQuantity ->
+            if (originalQuantity != null) {
+                throw RuntimeException("Duplicate Trade [$tradeId] added")
+            }
+            event.executedQuantity
+        }
 
         val updatedData = data.copy(tradeQuantities = updatedQuantities)
 
