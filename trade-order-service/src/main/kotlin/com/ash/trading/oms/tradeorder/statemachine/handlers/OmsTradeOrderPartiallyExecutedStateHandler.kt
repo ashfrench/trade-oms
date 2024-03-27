@@ -1,5 +1,6 @@
 package com.ash.trading.oms.tradeorder.statemachine.handlers
 
+import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
 import com.ash.trading.oms.tradeorder.statemachine.event.*
@@ -14,7 +15,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
         try {
             return when(event) {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)
-                is CancelTradeOrderEvent -> TODO()
+                is CancelTradeOrderEvent -> handleCancelTrade(data, event)
                 is RemoveTradeFromTradeOrderEvent -> TODO()
                 is UpdateTradeForTradeOrderEvent -> TODO()
                 else -> {
@@ -50,6 +51,11 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
         }
 
         return updatedData to updateState
+    }
+
+    private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        val updatedData = data.copy(cancelledQuantity = CancelledQuantity(data.openQuantity, event.cancelledTime))
+        return updatedData to OmsTradeOrderState.CANCELLED
     }
 
 }
