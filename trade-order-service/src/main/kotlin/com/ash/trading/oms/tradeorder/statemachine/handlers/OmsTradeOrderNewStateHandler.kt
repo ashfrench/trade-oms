@@ -37,9 +37,7 @@ object OmsTradeOrderNewStateHandler {
         if (event.executedQuantity < BigDecimal.ZERO) {
             throw RuntimeException("Executed Quantity added must be a positive value")
         }
-        val updatedData = data.copy(
-            tradeQuantities = data.tradeQuantities + mapOf(event.tradeId to event.executedQuantity)
-        )
+        val updatedData = data.copy(tradeQuantities = mapOf(event.tradeId to event.executedQuantity))
 
         val updateState = if (updatedData.openQuantity == BigDecimal.ZERO) {
             OmsTradeOrderState.EXECUTED
