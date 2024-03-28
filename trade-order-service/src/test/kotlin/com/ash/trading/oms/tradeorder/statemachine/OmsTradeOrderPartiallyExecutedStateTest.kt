@@ -32,6 +32,44 @@ class OmsTradeOrderPartiallyExecutedStateTest {
     }
 
     @Test
+    fun `can transition from partially executed back to new when removing a trade`() {
+        val tradeId = newTradeId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(tradeId to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.PARTIALLY_EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            RemoveTradeFromTradeOrderEvent(tradeId)
+        )
+
+        assertAll(
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 0" } },
+            { assertEquals(OmsTradeOrderState.NEW, updatedState) }
+        )
+    }
+
+    @Test
+    fun `can stay in partially executed back to when removing a trade and leaving remaining trades`() {
+        val tradeId = newTradeId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(tradeId to BigDecimal.ONE, newTradeId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.PARTIALLY_EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            RemoveTradeFromTradeOrderEvent(tradeId)
+        )
+
+        assertAll(
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal(9), updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 9" } },
+            { assertEquals(BigDecimal.ONE, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ONE, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 1" } },
+            { assertEquals(OmsTradeOrderState.PARTIALLY_EXECUTED, updatedState) }
+        )
+    }
+
+    @Test
     fun `can transition from partially executed to cancelled`() {
         val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(newTradeId() to BigDecimal.ONE))
         val cancelledTime = LocalDateTime.now()

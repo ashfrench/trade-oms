@@ -16,7 +16,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
             return when(event) {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)
                 is CancelTradeOrderEvent -> handleCancelTrade(data, event)
-                is RemoveTradeFromTradeOrderEvent -> TODO()
+                is RemoveTradeFromTradeOrderEvent -> handleRemoveTrade(data, event)
                 is UpdateTradeForTradeOrderEvent -> TODO()
                 else -> {
                     logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.PARTIALLY_EXECUTED}] state")
@@ -56,6 +56,25 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
     private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
         val updatedData = data.copy(cancelledQuantity = CancelledQuantity(data.openQuantity, event.cancelledTime))
         return updatedData to OmsTradeOrderState.CANCELLED
+    }
+
+    private fun handleRemoveTrade(data: TradeOrderQuantities, event: RemoveTradeFromTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        if (!data.tradeQuantities.containsKey(event.tradeId)) {
+            return data to OmsTradeOrderState.PARTIALLY_EXECUTED
+        }
+
+        val updatedQuantities = data.tradeQuantities.toMutableMap()
+        updatedQuantities.remove(event.tradeId)
+
+        val updatedData = data.copy(tradeQuantities = updatedQuantities)
+
+        val updateState = if (updatedData.usedQuantity == BigDecimal.ZERO) {
+            OmsTradeOrderState.NEW
+        } else {
+            OmsTradeOrderState.PARTIALLY_EXECUTED
+        }
+
+        return updatedData to updateState
     }
 
 }
