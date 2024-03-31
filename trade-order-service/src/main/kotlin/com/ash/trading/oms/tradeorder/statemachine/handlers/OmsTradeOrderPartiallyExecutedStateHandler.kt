@@ -13,11 +13,15 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
         try {
+            if (data.openQuantity > BigDecimal.ZERO && data.usedQuantity > BigDecimal.ZERO) {
+                throw RuntimeException("Partially Executed Data should have a positive used quantity and positive open quantity")
+            }
+
             return when(event) {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)
                 is CancelTradeOrderEvent -> handleCancelTrade(data, event)
                 is RemoveTradeFromTradeOrderEvent -> handleRemoveTrade(data, event)
-                is UpdateTradeForTradeOrderEvent -> TODO()
+                is UpdateTradeForTradeOrderEvent -> handleUpdateTrade(data, event)
                 else -> {
                     logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.PARTIALLY_EXECUTED}] state")
                     return data to OmsTradeOrderState.PARTIALLY_EXECUTED
@@ -68,8 +72,27 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
 
         val updatedData = data.copy(tradeQuantities = updatedQuantities)
 
-        val updateState = if (updatedData.usedQuantity == BigDecimal.ZERO) {
-            OmsTradeOrderState.NEW
+        val updateState = if (updatedData.openQuantity == BigDecimal.ZERO) {
+            OmsTradeOrderState.EXECUTED
+        } else {
+            OmsTradeOrderState.PARTIALLY_EXECUTED
+        }
+
+        return updatedData to updateState
+    }
+
+    private fun handleUpdateTrade(data: TradeOrderQuantities, event: UpdateTradeForTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        if (event.executedQuantity <= BigDecimal.ZERO) {
+            throw RuntimeException("Executed Quantity added must be a positive value")
+        }
+
+        val updatedQuantities = data.tradeQuantities.toMutableMap()
+        updatedQuantities.computeIfPresent(event.tradeId) { _,_ -> event.executedQuantity }
+
+        val updatedData = data.copy(tradeQuantities = updatedQuantities)
+
+        val updateState = if (updatedData.openQuantity == BigDecimal.ZERO) {
+            OmsTradeOrderState.EXECUTED
         } else {
             OmsTradeOrderState.PARTIALLY_EXECUTED
         }
