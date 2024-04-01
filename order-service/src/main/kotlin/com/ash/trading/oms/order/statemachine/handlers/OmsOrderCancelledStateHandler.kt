@@ -11,7 +11,7 @@ object OmsOrderCancelledStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderCancelledStateHandler::class.java)
 
     fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.CANCELLED} state")
+        logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.CANCELLED} state")
         return data to OmsOrderState.CANCELLED
     }
 

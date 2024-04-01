@@ -37,7 +37,7 @@ object OmsOrderNewStateHandler {
     }
 
     private fun handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.NEW} state")
+        logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.NEW} state")
         return data to OmsOrderState.NEW
     }
 

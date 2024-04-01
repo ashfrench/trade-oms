@@ -24,7 +24,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
                 is RemoveTradeFromTradeOrderEvent -> handleRemoveTrade(data, event)
                 is UpdateTradeForTradeOrderEvent -> handleUpdateTrade(data, event)
                 else -> {
-                    logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.PARTIALLY_EXECUTED}] state")
+                    logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.PARTIALLY_EXECUTED}] state")
                     return data to OmsTradeOrderState.PARTIALLY_EXECUTED
                 }
             }

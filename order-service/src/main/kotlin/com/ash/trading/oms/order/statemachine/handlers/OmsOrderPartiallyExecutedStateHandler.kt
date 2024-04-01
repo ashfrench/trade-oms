@@ -49,7 +49,7 @@ object OmsOrderPartiallyExecutedStateHandler {
     }
 
     private fun handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.PARTIALLY_EXECUTED} state")
+        logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.PARTIALLY_EXECUTED} state")
         return data to OmsOrderState.PARTIALLY_EXECUTED
     }
 

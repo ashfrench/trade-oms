@@ -24,7 +24,7 @@ object OmsTradeOrderNewStateHandler {
                 is RemoveOrderFromTradeOrderEvent -> handleRemoveOrderEvent(data, event)
                 is UpdateOrderForTradeOrderEvent -> handleUpdateOrderEvent(data, event)
                 else -> {
-                    logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.NEW}] state")
+                    logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.NEW}] state")
                     return data to OmsTradeOrderState.NEW
                 }
             }

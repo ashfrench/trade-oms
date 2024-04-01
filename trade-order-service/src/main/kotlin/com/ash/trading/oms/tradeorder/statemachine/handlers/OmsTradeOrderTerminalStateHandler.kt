@@ -11,7 +11,7 @@ class OmsTradeOrderTerminalStateHandler(private val state: OmsTradeOrderState) {
     private val logger = LoggerFactory.getLogger(OmsTradeOrderTerminalStateHandler::class.java)
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
-        logger.error("Invalid Event Type [${event.javaClass.simpleName}] from [$state] state")
+        logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from [$state] state")
         return data to state
     }
 }
