@@ -13,7 +13,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
         try {
-            if (data.openQuantity > BigDecimal.ZERO && data.usedQuantity > BigDecimal.ZERO) {
+            if (data.openQuantity < BigDecimal.ZERO && data.usedQuantity < BigDecimal.ZERO) {
                 throw RuntimeException("Partially Executed Data should have a positive used quantity and positive open quantity")
             }
 
@@ -72,8 +72,8 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
 
         val updatedData = data.copy(tradeQuantities = updatedQuantities)
 
-        val updateState = if (updatedData.openQuantity == BigDecimal.ZERO) {
-            OmsTradeOrderState.EXECUTED
+        val updateState = if (updatedData.usedQuantity == BigDecimal.ZERO) {
+            OmsTradeOrderState.NEW
         } else {
             OmsTradeOrderState.PARTIALLY_EXECUTED
         }
