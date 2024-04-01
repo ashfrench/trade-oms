@@ -31,6 +31,8 @@ enum class OmsTradeOrderState {
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = handler.handleEvent(data, event)
     };
 
-    abstract fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState>
+    abstract fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState
 
 }
+
+typealias TradeOrderQuantitiesState = Pair<TradeOrderQuantities, OmsTradeOrderState>

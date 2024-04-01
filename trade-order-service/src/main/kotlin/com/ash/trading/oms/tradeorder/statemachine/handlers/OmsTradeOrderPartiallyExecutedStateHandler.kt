@@ -3,6 +3,7 @@ package com.ash.trading.oms.tradeorder.statemachine.handlers
 import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
+import com.ash.trading.oms.tradeorder.statemachine.TradeOrderQuantitiesState
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
@@ -11,7 +12,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderPartiallyExecutedStateHandler::class.java)
 
-    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
         try {
             if (data.openQuantity < BigDecimal.ZERO && data.usedQuantity < BigDecimal.ZERO) {
                 throw RuntimeException("Partially Executed Data should have a positive used quantity and positive open quantity")
@@ -33,7 +34,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
         }
     }
 
-    private fun handleAddTrade(data: TradeOrderQuantities, event: AddTradeToTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleAddTrade(data: TradeOrderQuantities, event: AddTradeToTradeOrderEvent): TradeOrderQuantitiesState {
         if (event.executedQuantity < BigDecimal.ZERO) {
             throw RuntimeException("Executed Quantity added must be a positive value")
         }
@@ -57,12 +58,12 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
         return updatedData to updateState
     }
 
-    private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): TradeOrderQuantitiesState {
         val updatedData = data.copy(cancelledQuantity = CancelledQuantity(data.openQuantity, event.cancelledTime))
         return updatedData to OmsTradeOrderState.CANCELLED
     }
 
-    private fun handleRemoveTrade(data: TradeOrderQuantities, event: RemoveTradeFromTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleRemoveTrade(data: TradeOrderQuantities, event: RemoveTradeFromTradeOrderEvent): TradeOrderQuantitiesState {
         if (!data.tradeQuantities.containsKey(event.tradeId)) {
             return data to OmsTradeOrderState.PARTIALLY_EXECUTED
         }
@@ -81,7 +82,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
         return updatedData to updateState
     }
 
-    private fun handleUpdateTrade(data: TradeOrderQuantities, event: UpdateTradeForTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleUpdateTrade(data: TradeOrderQuantities, event: UpdateTradeForTradeOrderEvent): TradeOrderQuantitiesState {
         if (event.executedQuantity <= BigDecimal.ZERO) {
             throw RuntimeException("Executed Quantity added must be a positive value")
         }

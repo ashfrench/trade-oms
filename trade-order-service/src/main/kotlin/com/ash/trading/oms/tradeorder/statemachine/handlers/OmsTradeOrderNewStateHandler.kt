@@ -3,6 +3,7 @@ package com.ash.trading.oms.tradeorder.statemachine.handlers
 import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
+import com.ash.trading.oms.tradeorder.statemachine.TradeOrderQuantitiesState
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
@@ -11,7 +12,7 @@ object OmsTradeOrderNewStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderNewStateHandler::class.java)
 
-    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
         try {
             if (data.usedQuantity != BigDecimal.ZERO) {
                 throw RuntimeException("New Data should have ZERO used quantity")
@@ -33,7 +34,7 @@ object OmsTradeOrderNewStateHandler {
         }
     }
 
-    private fun handleAddTrade(data: TradeOrderQuantities, event: AddTradeToTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleAddTrade(data: TradeOrderQuantities, event: AddTradeToTradeOrderEvent): TradeOrderQuantitiesState {
         if (event.executedQuantity < BigDecimal.ZERO) {
             throw RuntimeException("Executed Quantity added must be a positive value")
         }
@@ -48,7 +49,7 @@ object OmsTradeOrderNewStateHandler {
         return updatedData to updateState
     }
 
-    private fun handleAddOrderEvent(data: TradeOrderQuantities, event: AddOrderToTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleAddOrderEvent(data: TradeOrderQuantities, event: AddOrderToTradeOrderEvent): TradeOrderQuantitiesState {
         if (data.orderQuantities.containsKey(event.orderId)) {
             throw RuntimeException("Must not add OrderId[${event.orderId}] that already exists in the Trade Order")
         }
@@ -62,7 +63,7 @@ object OmsTradeOrderNewStateHandler {
         return updatedData to OmsTradeOrderState.NEW
     }
 
-    private fun handleUpdateOrderEvent(data: TradeOrderQuantities, event: UpdateOrderForTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleUpdateOrderEvent(data: TradeOrderQuantities, event: UpdateOrderForTradeOrderEvent): TradeOrderQuantitiesState {
         if (event.workedQuantity < BigDecimal.ZERO) {
             throw RuntimeException("Worked Quantity added must be a positive value")
         }
@@ -78,7 +79,7 @@ object OmsTradeOrderNewStateHandler {
         return updatedData to OmsTradeOrderState.NEW
     }
 
-    private fun handleRemoveOrderEvent(data: TradeOrderQuantities, event: RemoveOrderFromTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleRemoveOrderEvent(data: TradeOrderQuantities, event: RemoveOrderFromTradeOrderEvent): TradeOrderQuantitiesState {
         val updatedOrderQuantities = data.orderQuantities.toMutableMap()
         updatedOrderQuantities.remove(event.orderId)
 
@@ -92,7 +93,7 @@ object OmsTradeOrderNewStateHandler {
         }
     }
 
-    private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    private fun handleCancelTrade(data: TradeOrderQuantities, event: CancelTradeOrderEvent): TradeOrderQuantitiesState {
         val updatedData = data.copy(cancelledQuantity = CancelledQuantity(data.openQuantity, event.cancelledTime))
         return updatedData to OmsTradeOrderState.CANCELLED
     }

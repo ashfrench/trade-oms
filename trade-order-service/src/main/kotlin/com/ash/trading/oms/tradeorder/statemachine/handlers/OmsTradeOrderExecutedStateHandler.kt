@@ -2,6 +2,7 @@ package com.ash.trading.oms.tradeorder.statemachine.handlers
 
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
+import com.ash.trading.oms.tradeorder.statemachine.TradeOrderQuantitiesState
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 
@@ -9,7 +10,7 @@ object OmsTradeOrderExecutedStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderExecutedStateHandler::class.java)
 
-    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
         try {
             when(event) {
                 is AddTradeToTradeOrderEvent -> TODO()
