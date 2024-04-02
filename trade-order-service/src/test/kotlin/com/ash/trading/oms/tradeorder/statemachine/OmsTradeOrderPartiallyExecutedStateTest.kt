@@ -1,12 +1,10 @@
 package com.ash.trading.oms.tradeorder.statemachine
 
-import com.ash.trading.oms.model.CancelledQuantity
-import com.ash.trading.oms.model.TradeOrderQuantities
-import com.ash.trading.oms.model.newOrderId
-import com.ash.trading.oms.model.newTradeId
+import com.ash.trading.oms.model.*
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -141,4 +139,18 @@ class OmsTradeOrderPartiallyExecutedStateTest {
         )
     }
 
+    @Test
+    fun `can handle quantities that are not in partially executed`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
+
+
+        val exception = assertThrows<RuntimeException>("Invalid order type") {
+            OmsTradeOrderState.PARTIALLY_EXECUTED.handleEvent(
+                tradeOrderQuantities,
+                AddTradeToTradeOrderEvent(newTradeId(), BigDecimal.ONE)
+            )
+        }
+
+        assertEquals("Partially Executed Data should have a positive used quantity and positive open quantity", exception.message)
+    }
 }

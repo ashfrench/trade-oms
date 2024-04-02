@@ -13,10 +13,10 @@ object OmsTradeOrderNewStateHandler {
     private val logger = LoggerFactory.getLogger(OmsTradeOrderNewStateHandler::class.java)
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
+        if (data.usedQuantity != BigDecimal.ZERO) {
+            throw RuntimeException("New Data should have ZERO used quantity")
+        }
         try {
-            if (data.usedQuantity != BigDecimal.ZERO) {
-                throw RuntimeException("New Data should have ZERO used quantity")
-            }
             return when (event) {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)
                 is AddOrderToTradeOrderEvent -> handleAddOrderEvent(data, event)
