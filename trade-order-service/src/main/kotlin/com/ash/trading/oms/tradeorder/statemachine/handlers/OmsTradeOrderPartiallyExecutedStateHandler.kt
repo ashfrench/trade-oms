@@ -13,8 +13,8 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
     private val logger = LoggerFactory.getLogger(OmsTradeOrderPartiallyExecutedStateHandler::class.java)
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
-        if (data.executedQuantity <= BigDecimal.ZERO || data.openQuantity <= BigDecimal.ZERO) {
-            throw RuntimeException("Partially Executed Data should have a positive used quantity and positive open quantity")
+        check(data.executedQuantity > BigDecimal.ZERO && data.openQuantity > BigDecimal.ZERO) {
+            "Partially Executed Data should have a positive used quantity and positive open quantity"
         }
 
         try {

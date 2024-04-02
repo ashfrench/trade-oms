@@ -13,9 +13,10 @@ object OmsTradeOrderNewStateHandler {
     private val logger = LoggerFactory.getLogger(OmsTradeOrderNewStateHandler::class.java)
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
-        if (data.usedQuantity != BigDecimal.ZERO) {
-            throw RuntimeException("New Data should have ZERO used quantity")
+        check (data.usedQuantity == BigDecimal.ZERO) {
+            "New Data should have ZERO used quantity"
         }
+
         try {
             return when (event) {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)
@@ -35,8 +36,8 @@ object OmsTradeOrderNewStateHandler {
     }
 
     private fun handleAddTrade(data: TradeOrderQuantities, event: AddTradeToTradeOrderEvent): TradeOrderQuantitiesState {
-        if (event.executedQuantity < BigDecimal.ZERO) {
-            throw RuntimeException("Executed Quantity added must be a positive value")
+        check (event.executedQuantity > BigDecimal.ZERO) {
+            "Executed Quantity added must be a positive value"
         }
         val updatedData = data.copy(tradeQuantities = mapOf(event.tradeId to event.executedQuantity))
 
@@ -50,12 +51,12 @@ object OmsTradeOrderNewStateHandler {
     }
 
     private fun handleAddOrderEvent(data: TradeOrderQuantities, event: AddOrderToTradeOrderEvent): TradeOrderQuantitiesState {
-        if (data.orderQuantities.containsKey(event.orderId)) {
-            throw RuntimeException("Must not add OrderId[${event.orderId}] that already exists in the Trade Order")
+        check(!data.orderQuantities.containsKey(event.orderId)) {
+            "Must not add OrderId[${event.orderId}] that already exists in the Trade Order"
         }
 
-        if (event.workedQuantity < BigDecimal.ZERO) {
-            throw RuntimeException("Worked Quantity added must be a positive value")
+        check(event.workedQuantity > BigDecimal.ZERO) {
+            "Worked Quantity added must be a positive value"
         }
         val updatedData = data.copy(
             orderQuantities = data.orderQuantities + mapOf(event.orderId to event.workedQuantity)
@@ -64,12 +65,12 @@ object OmsTradeOrderNewStateHandler {
     }
 
     private fun handleUpdateOrderEvent(data: TradeOrderQuantities, event: UpdateOrderForTradeOrderEvent): TradeOrderQuantitiesState {
-        if (event.workedQuantity < BigDecimal.ZERO) {
-            throw RuntimeException("Worked Quantity added must be a positive value")
+        check(event.workedQuantity > BigDecimal.ZERO) {
+            "Worked Quantity added must be a positive value"
         }
 
-        if (!data.orderQuantities.containsKey(event.orderId)) {
-            throw RuntimeException("Order ${event.orderId} is not in this Trade Order")
+        check(data.orderQuantities.containsKey(event.orderId)) {
+            "Order ${event.orderId} is not in this Trade Order"
         }
 
         val updatedOrderQuantities = data.orderQuantities.toMutableMap()
