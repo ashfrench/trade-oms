@@ -7,6 +7,7 @@ import com.ash.trading.oms.model.newTradeId
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -29,6 +30,20 @@ class OmsTradeOrderNewStateTest {
             { assertEquals(BigDecimal.TEN, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 10" } },
             { assertEquals(OmsTradeOrderState.EXECUTED, updatedState) }
         )
+    }
+
+    @Test
+    fun `new trades should have no used quantity`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(newTradeId() to BigDecimal.ONE))
+
+        val exception = assertThrows<IllegalStateException>("Invalid data") {
+            OmsTradeOrderState.NEW.handleEvent(
+                tradeOrderQuantities,
+                AddTradeToTradeOrderEvent(newTradeId(), BigDecimal.ONE)
+            )
+        }
+
+        assertEquals("New Data should have ZERO used quantity", exception.message)
     }
 
     @Test

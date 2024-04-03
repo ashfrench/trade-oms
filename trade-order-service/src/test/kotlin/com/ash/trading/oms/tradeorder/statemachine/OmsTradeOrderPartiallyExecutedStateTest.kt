@@ -144,7 +144,7 @@ class OmsTradeOrderPartiallyExecutedStateTest {
         val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE))
 
 
-        val exception = assertThrows<RuntimeException>("Invalid order type") {
+        val exception = assertThrows<IllegalStateException>("Invalid order type") {
             OmsTradeOrderState.PARTIALLY_EXECUTED.handleEvent(
                 tradeOrderQuantities,
                 AddTradeToTradeOrderEvent(newTradeId(), BigDecimal.ONE)
