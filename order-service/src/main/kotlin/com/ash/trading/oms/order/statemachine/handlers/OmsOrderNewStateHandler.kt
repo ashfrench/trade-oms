@@ -2,18 +2,25 @@ package com.ash.trading.oms.order.statemachine.handlers
 
 import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.OrderQuantity
+import com.ash.trading.oms.model.compareTo
 import com.ash.trading.oms.order.statemachine.OrderQuantityState
 import com.ash.trading.oms.order.statemachine.OmsOrderState
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
 import com.ash.trading.oms.order.statemachine.events.TraderWorkingEvent
 import org.slf4j.LoggerFactory
+import java.math.BigDecimal
 
 object OmsOrderNewStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderNewStateHandler::class.java)
 
     fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
+        check (data.usedQuantity == BigDecimal.ZERO) {
+            "${OmsOrderState.NEW} Data should have ZERO used quantity"
+        }
+
+
         return try {
             when (event) {
                 is OrderCancelledEvent -> handleOrderCancelledEvent(data, event)

@@ -292,7 +292,7 @@ class OmsOrderStateTest {
 
     @Test
     fun `cancelled is final state and has no transitions`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TEN)
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TEN, LocalDateTime.now()))
         val (updatedOrderQuantity, updatedState) = OmsOrderState.CANCELLED.handleEvent(
             orderQuantity,
             OrderCancelledEvent(LocalDateTime.now())
