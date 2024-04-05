@@ -7,6 +7,7 @@ import com.ash.trading.oms.order.statemachine.events.*
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -77,6 +78,18 @@ class OmsOrderStateTest {
             { assertEquals(updatedOrderQuantity, orderQuantity) },
             { assertEquals(OmsOrderState.NEW, updatedState) }
         )
+    }
+
+    @Test
+    fun `new state handling invalid working amount`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TWO)
+        val exception = assertThrows<IllegalStateException> { OmsOrderState.NEW.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(newTradeId(), BigDecimal.TEN)
+        ) }
+
+        assertEquals("NEW Data should have ZERO used quantity", exception.message)
+
     }
 
     @Test
