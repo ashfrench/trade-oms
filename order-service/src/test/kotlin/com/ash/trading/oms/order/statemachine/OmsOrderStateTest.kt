@@ -93,6 +93,28 @@ class OmsOrderStateTest {
     }
 
     @Test
+    fun `new state handling invalid executed amount`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TWO)
+        val exception = assertThrows<IllegalStateException> { OmsOrderState.NEW.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(newTradeId(), BigDecimal.TEN)
+        ) }
+
+        assertEquals("NEW Data should have ZERO used quantity", exception.message)
+    }
+
+    @Test
+    fun `new state handling invalid cancelled amount`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TWO, LocalDateTime.now()))
+        val exception = assertThrows<IllegalStateException> { OmsOrderState.NEW.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(newTradeId(), BigDecimal.TEN)
+        ) }
+
+        assertEquals("NEW Data should have ZERO used quantity", exception.message)
+    }
+
+    @Test
     fun `can transition from worked to executed`() {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, workedQuantity = BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
