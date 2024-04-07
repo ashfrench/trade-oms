@@ -123,4 +123,16 @@ class OmsOrderWorkedStateTest {
             { assertEquals(OmsOrderState.CANCELLED, updatedState) }
         )
     }
+
+    @Test
+    fun `worked state handling invalid working amount`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN)
+        val exception = assertThrows<IllegalStateException> { OmsOrderState.WORKED.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(newTradeId(), BigDecimal.TWO)
+        ) }
+
+        assertEquals("WORKED Data should have worked quantity greater than ZERO and open quantity greater than ZERO", exception.message)
+
+    }
 }
