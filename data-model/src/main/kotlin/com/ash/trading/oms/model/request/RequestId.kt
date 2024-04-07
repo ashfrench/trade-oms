@@ -1,4 +1,4 @@
-package com.ash.trading.oms.request
+package com.ash.trading.oms.model.request
 
 import java.util.UUID
 

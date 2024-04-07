@@ -1,4 +1,4 @@
-package com.ash.trading.oms.statemachine
+package com.ash.trading.oms.model.statemachine
 
 interface State {
 

@@ -1,6 +1,6 @@
 package com.ash.trading.oms.model
 
-import com.ash.trading.oms.user.TraderId
+import com.ash.trading.oms.model.user.TraderId
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.UUID

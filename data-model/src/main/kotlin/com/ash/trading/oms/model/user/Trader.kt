@@ -1,4 +1,4 @@
-package com.ash.trading.oms.user
+package com.ash.trading.oms.model.user
 
 import java.util.UUID
 

@@ -13,7 +13,7 @@ object OmsOrderCancelledStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderCancelledStateHandler::class.java)
 
     fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check(data.cancelledQuantity > BigDecimal.ZERO) {
+        check(data.cancelledQuantity > BigDecimal.ZERO && data.openQuantity == BigDecimal.ZERO) {
             "${OmsOrderState.CANCELLED} data should have some cancelled quantity"
         }
         logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.CANCELLED} state")
