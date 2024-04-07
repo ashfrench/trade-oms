@@ -11,19 +11,19 @@ import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-class OmsOrderStateTest {
+class OmsOrderExecutedStateTest {
 
     @Test
-    fun `cancelled is final state and has no transitions`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TEN, LocalDateTime.now()))
-        val (updatedOrderQuantity, updatedState) = OmsOrderState.CANCELLED.handleEvent(
+    fun `executed is final state and has no transitions`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TEN)
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.EXECUTED.handleEvent(
             orderQuantity,
             OrderCancelledEvent(LocalDateTime.now())
         )
 
         assertAll(
             { assertEquals(updatedOrderQuantity, orderQuantity) },
-            { assertEquals(OmsOrderState.CANCELLED, updatedState) }
+            { assertEquals(OmsOrderState.EXECUTED, updatedState) }
         )
     }
 
