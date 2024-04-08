@@ -105,7 +105,7 @@ class OmsOrderNewStateTest {
 
     @Test
     fun `new state handling invalid cancelled amount`() {
-        val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TWO, LocalDateTime.now()))
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TWO))
         val exception = assertThrows<IllegalStateException> { OmsOrderState.NEW.handleEvent(
             orderQuantity,
             TraderExecutedEvent(newTradeId(), BigDecimal.TEN)
