@@ -1,6 +1,7 @@
 package com.ash.trading.oms.order.statemachine
 
 import com.ash.trading.oms.model.CancelledQuantity
+import com.ash.trading.oms.model.ExecutedQuantity
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.model.newTradeId
 import com.ash.trading.oms.order.statemachine.events.*
@@ -28,7 +29,7 @@ class OmsOrderCancelledStateTest {
     }
 
     @Test
-    fun `cancelled state handling invalid working amount`() {
+    fun `cancelled state handling invalid cancelled amount`() {
         val orderQuantity = OrderQuantity(BigDecimal.TEN)
         val exception = assertThrows<IllegalStateException> { OmsOrderState.CANCELLED.handleEvent(
             orderQuantity,
@@ -36,7 +37,31 @@ class OmsOrderCancelledStateTest {
         ) }
 
         assertEquals("CANCELLED data should have some cancelled quantity", exception.message)
+    }
 
+    @Test
+    fun `cancelled state handling invalid cancelled amount and left over open quantity`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TWO))
+        val exception = assertThrows<IllegalStateException> { OmsOrderState.CANCELLED.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(newTradeId(), BigDecimal.TWO)
+        ) }
+
+        assertEquals("CANCELLED data should have some cancelled quantity", exception.message)
+    }
+
+    @Test
+    fun `can be in cancelled state with partially executed orders`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TWO), executedQuantity = BigDecimal(8))
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.CANCELLED.handleEvent(
+            orderQuantity,
+            OrderCancelledEvent(LocalDateTime.now())
+        )
+
+        assertAll(
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.CANCELLED, updatedState) }
+        )
     }
 
 }
