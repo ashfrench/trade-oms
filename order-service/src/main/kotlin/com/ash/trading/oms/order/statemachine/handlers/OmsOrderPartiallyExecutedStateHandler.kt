@@ -15,7 +15,7 @@ object OmsOrderPartiallyExecutedStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
     fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check (data.executedQuantity > BigDecimal.ZERO && data.executedQuantity < data.totalQuantity) {
+        check (data.executedQuantity > BigDecimal.ZERO && data.executedQuantity < data.totalQuantity && data.cancelledQuantity.quantity == BigDecimal.ZERO) {
             "${OmsOrderState.PARTIALLY_EXECUTED} Data should have executed quantity greater than ZERO and less than the total quantity"
         }
 

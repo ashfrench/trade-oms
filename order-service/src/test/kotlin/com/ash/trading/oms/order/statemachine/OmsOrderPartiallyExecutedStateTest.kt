@@ -100,7 +100,7 @@ class OmsOrderPartiallyExecutedStateTest {
     }
 
     @Test
-    fun `partially executed state handling invalid working amount`() {
+    fun `partially executed state handling invalid executed amount`() {
         val orderQuantity = OrderQuantity(BigDecimal.TEN)
         val exception = assertThrows<IllegalStateException> { OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
             orderQuantity,
@@ -108,7 +108,28 @@ class OmsOrderPartiallyExecutedStateTest {
         ) }
 
         assertEquals("PARTIALLY_EXECUTED Data should have executed quantity greater than ZERO and less than the total quantity", exception.message)
+    }
 
+    @Test
+    fun `partially executed state handling excessive executed amount`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TEN)
+        val exception = assertThrows<IllegalStateException> { OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(newTradeId(), BigDecimal.TWO)
+        ) }
+
+        assertEquals("PARTIALLY_EXECUTED Data should have executed quantity greater than ZERO and less than the total quantity", exception.message)
+    }
+
+    @Test
+    fun `partially executed state handling invalid cancelled amount`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TWO, cancelledQuantity = CancelledQuantity(BigDecimal.TWO))
+        val exception = assertThrows<IllegalStateException> { OmsOrderState.PARTIALLY_EXECUTED.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(newTradeId(), BigDecimal.TWO)
+        ) }
+
+        assertEquals("PARTIALLY_EXECUTED Data should have executed quantity greater than ZERO and less than the total quantity", exception.message)
     }
 
 }
