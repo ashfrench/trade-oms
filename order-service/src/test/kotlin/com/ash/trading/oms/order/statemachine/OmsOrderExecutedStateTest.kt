@@ -18,7 +18,7 @@ class OmsOrderExecutedStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TEN)
         val (updatedOrderQuantity, updatedState) = OmsOrderState.EXECUTED.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(LocalDateTime.now())
+            OrderCancelledEvent()
         )
 
         assertAll(

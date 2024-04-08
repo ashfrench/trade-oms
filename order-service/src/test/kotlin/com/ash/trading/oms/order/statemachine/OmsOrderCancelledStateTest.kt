@@ -19,7 +19,7 @@ class OmsOrderCancelledStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TEN, LocalDateTime.now()))
         val (updatedOrderQuantity, updatedState) = OmsOrderState.CANCELLED.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(LocalDateTime.now())
+            OrderCancelledEvent()
         )
 
         assertAll(
@@ -55,7 +55,7 @@ class OmsOrderCancelledStateTest {
         val orderQuantity = OrderQuantity(BigDecimal.TEN, cancelledQuantity = CancelledQuantity(BigDecimal.TWO), executedQuantity = BigDecimal(8))
         val (updatedOrderQuantity, updatedState) = OmsOrderState.CANCELLED.handleEvent(
             orderQuantity,
-            OrderCancelledEvent(LocalDateTime.now())
+            OrderCancelledEvent()
         )
 
         assertAll(
