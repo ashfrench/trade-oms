@@ -19,6 +19,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
     implementation(libs.swagger)
+    implementation(libs.kotlinxjson)
 }
 
 tasks.test {
