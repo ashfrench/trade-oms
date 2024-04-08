@@ -1,8 +1,15 @@
 package com.ash.trading.oms.tradeorder.statemachine
 
-import com.ash.trading.oms.model.*
-import com.ash.trading.oms.tradeorder.statemachine.event.*
-import org.junit.jupiter.api.Assertions.*
+import com.ash.trading.oms.model.CancelledQuantity
+import com.ash.trading.oms.model.TradeOrderQuantities
+import com.ash.trading.oms.model.newOrderId
+import com.ash.trading.oms.model.newTradeId
+import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
+import com.ash.trading.oms.tradeorder.statemachine.event.CancelTradeOrderEvent
+import com.ash.trading.oms.tradeorder.statemachine.event.RemoveTradeFromTradeOrderEvent
+import com.ash.trading.oms.tradeorder.statemachine.event.UpdateTradeForTradeOrderEvent
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
