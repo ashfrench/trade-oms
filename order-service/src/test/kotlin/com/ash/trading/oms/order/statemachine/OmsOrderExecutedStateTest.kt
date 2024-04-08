@@ -28,7 +28,7 @@ class OmsOrderExecutedStateTest {
     }
 
     @Test
-    fun `executed state handling invalid working amount`() {
+    fun `executed state handling no executed amount`() {
         val orderQuantity = OrderQuantity(BigDecimal.TEN)
         val exception = assertThrows<IllegalStateException> { OmsOrderState.EXECUTED.handleEvent(
             orderQuantity,
@@ -37,6 +37,17 @@ class OmsOrderExecutedStateTest {
 
         assertEquals("EXECUTED data should have executed quantity equal to the total quantity", exception.message)
 
+    }
+
+    @Test
+    fun `executed state handling invalid executed amount`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TWO, workedQuantity = BigDecimal(8))
+        val exception = assertThrows<IllegalStateException> { OmsOrderState.EXECUTED.handleEvent(
+            orderQuantity,
+            TraderExecutedEvent(newTradeId(), BigDecimal.TWO)
+        ) }
+
+        assertEquals("EXECUTED data should have executed quantity equal to the total quantity", exception.message)
     }
 
 }
