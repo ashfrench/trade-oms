@@ -26,6 +26,7 @@ object OmsOrderWorkedStateHandler {
                 is TraderExecutedEvent -> handleTradeExecution(data, event)
                 is OrderCancelledEvent -> handleOrderCancellation(data, event)
                 is TraderWorkingEvent -> handleTraderWorkingEvent(data, event)
+                else -> handleUnplannedEvent(data, event)
             }
         } catch (e: Exception) {
             logger.error("Error Handling Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.WORKED} state", e)
@@ -59,6 +60,11 @@ object OmsOrderWorkedStateHandler {
             workedQuantity = BigDecimal.ZERO
         )
         return updatedData to OmsOrderState.CANCELLED
+    }
+
+    private fun handleUnplannedEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
+        logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.WORKED} state")
+        return data to OmsOrderState.WORKED
     }
 
 }

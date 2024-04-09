@@ -16,8 +16,7 @@ enum class OmsOrderState {
     },
     WORKED {
         override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState = OmsOrderWorkedStateHandler.handleEvent(data, event)
-        override fun isValid(data: OrderQuantity) =
-            data.workedQuantity > BigDecimal.ZERO && data.executedQuantity == BigDecimal.ZERO && data.cancelledQuantity.quantity == BigDecimal.ZERO
+        override fun isValid(data: OrderQuantity) = data.workedQuantity > BigDecimal.ZERO && data.executedQuantity == BigDecimal.ZERO && data.cancelledQuantity.quantity == BigDecimal.ZERO
     },
     EXECUTED {
         override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState = OmsOrderExecutedStateHandler.handleEvent(data, event)
@@ -25,19 +24,14 @@ enum class OmsOrderState {
     },
     PARTIALLY_EXECUTED {
         override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState = OmsOrderPartiallyExecutedStateHandler.handleEvent(data, event)
-        override fun isValid(data: OrderQuantity) =
-            data.executedQuantity > BigDecimal.ZERO && data.executedQuantity < data.totalQuantity && data.cancelledQuantity.quantity == BigDecimal.ZERO
+        override fun isValid(data: OrderQuantity) = data.executedQuantity > BigDecimal.ZERO && data.executedQuantity < data.totalQuantity && data.cancelledQuantity.quantity == BigDecimal.ZERO
     },
     CANCELLED {
         override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState = OmsOrderCancelledStateHandler.handleEvent(data, event)
-        override fun isValid(data: OrderQuantity) =
-            data.cancelledQuantity > BigDecimal.ZERO && data.openQuantity == BigDecimal.ZERO
+        override fun isValid(data: OrderQuantity) = data.cancelledQuantity > BigDecimal.ZERO && data.openQuantity == BigDecimal.ZERO
     },
     ERROR {
-        override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-            TODO("Not yet implemented")
-        }
-
+        override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState = OmsOrderErrorStateHandler.handleEvent(data, event)
         override fun isValid(data: OrderQuantity) = entries.filter { it != ERROR }.none { it.isValid(data) }
     };
 
