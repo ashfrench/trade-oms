@@ -32,6 +32,13 @@ enum class OmsOrderState {
         override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState = OmsOrderCancelledStateHandler.handleEvent(data, event)
         override fun isValid(data: OrderQuantity) =
             data.cancelledQuantity > BigDecimal.ZERO && data.openQuantity == BigDecimal.ZERO
+    },
+    ERROR {
+        override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
+            TODO("Not yet implemented")
+        }
+
+        override fun isValid(data: OrderQuantity) = entries.filter { it != ERROR }.none { it.isValid(data) }
     };
 
     abstract fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState
