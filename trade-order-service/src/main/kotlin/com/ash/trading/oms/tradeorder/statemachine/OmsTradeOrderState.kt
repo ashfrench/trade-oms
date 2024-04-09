@@ -29,10 +29,14 @@ enum class OmsTradeOrderState {
     DELETED {
         private val handler = OmsTradeOrderTerminalStateHandler(DELETED)
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = handler.handleEvent(data, event)
+    },
+    ERROR {
+        override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState = TODO()
     };
 
     abstract fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState
-
+    fun isValid(data: TradeOrderQuantities): Boolean = TODO()
 }
 
+operator fun OmsTradeOrderState.contains(data: TradeOrderQuantities): Boolean = isValid(data)
 typealias TradeOrderQuantitiesState = Pair<TradeOrderQuantities, OmsTradeOrderState>
