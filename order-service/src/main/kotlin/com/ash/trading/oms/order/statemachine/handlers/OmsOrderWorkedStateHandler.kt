@@ -4,6 +4,7 @@ import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.order.statemachine.OmsOrderState
 import com.ash.trading.oms.order.statemachine.OrderQuantityState
+import com.ash.trading.oms.order.statemachine.contains
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
 import com.ash.trading.oms.order.statemachine.events.TraderExecutedEvent
@@ -16,7 +17,7 @@ object OmsOrderWorkedStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
     fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check (data.workedQuantity > BigDecimal.ZERO && data.executedQuantity == BigDecimal.ZERO && data.cancelledQuantity.quantity == BigDecimal.ZERO) {
+        check (data in OmsOrderState.WORKED) {
             "${OmsOrderState.WORKED} Data should have worked quantity greater than ZERO and open quantity greater than ZERO"
         }
 
