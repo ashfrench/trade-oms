@@ -36,4 +36,24 @@ class OmsOrderErrorStateTest {
         )
     }
 
+    @Test
+    fun `stays in error when data is not valid for updated state`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TWO, cancelledQuantity = CancelledQuantity(BigDecimal.TWO, LocalDateTime.now()))
+
+        val newData = OrderQuantity(BigDecimal.TEN, executedQuantity = BigDecimal.TEN)
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.ERROR.handleEvent(
+            orderQuantity,
+            AdminFixEvent(
+                newUserId(),
+                newData,
+                OmsOrderState.NEW
+            )
+        )
+
+        assertAll(
+            { assertEquals(orderQuantity, updatedOrderQuantity) },
+            { assertEquals(OmsOrderState.ERROR, updatedState) }
+        )
+    }
+
 }
