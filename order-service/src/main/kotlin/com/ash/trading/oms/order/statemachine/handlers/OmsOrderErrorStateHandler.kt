@@ -22,7 +22,12 @@ object OmsOrderErrorStateHandler {
 
         return if (event is AdminFixEvent) {
             logger.info("User ${event.userId} reset with data ${event.data} to state ${event.newState}")
-            event.data to event.newState
+            if (event.newState.isValid(event.data)) {
+                event.data to event.newState
+            } else {
+                logger.warn("Updated Data ${event.data} was invalid for new state ${event.newState}")
+                data to OmsOrderState.ERROR
+            }
         } else {
             logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.ERROR} state")
             data to OmsOrderState.ERROR

@@ -1,5 +1,6 @@
 package com.ash.trading.oms.model.user
 
+import com.ash.trading.oms.model.TraderId
 import java.util.UUID
 
 data class Trader(
@@ -7,4 +8,3 @@ data class Trader(
     val traderName: String
 )
 
-typealias TraderId = UUID

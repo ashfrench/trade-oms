@@ -1,9 +1,7 @@
 package com.ash.trading.oms.model
 
-import com.ash.trading.oms.model.user.TraderId
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.util.UUID
 
 data class TradeOrder(
     val tradeOrderId: TradeOrderId = newTradeOrderId(),

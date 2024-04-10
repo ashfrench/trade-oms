@@ -6,6 +6,8 @@ import java.util.*
 typealias OrderId = UUID
 typealias TradeId = UUID
 typealias TradeOrderId = UUID
+typealias UserId = UUID
+typealias TraderId = UUID
 
 typealias TotalQuantity = BigDecimal
 typealias OpenQuantity = BigDecimal
