@@ -37,5 +37,3 @@ data class TradeOrder(
     }
 }
 
-typealias TradeOrderId = UUID
-fun newTradeOrderId(): TradeOrderId = UUID.randomUUID()

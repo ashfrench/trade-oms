@@ -11,6 +11,3 @@ data class Order(
     val tradeOrders: List<TradeOrderId> = emptyList()
 )
 
-typealias OrderId = UUID
-
-fun newOrderId(): OrderId = UUID.randomUUID()
