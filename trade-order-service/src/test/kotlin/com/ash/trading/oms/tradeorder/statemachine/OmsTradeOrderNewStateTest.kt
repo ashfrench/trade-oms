@@ -1,9 +1,6 @@
 package com.ash.trading.oms.tradeorder.statemachine
 
-import com.ash.trading.oms.model.CancelledQuantity
-import com.ash.trading.oms.model.TradeOrderQuantities
-import com.ash.trading.oms.model.newOrderId
-import com.ash.trading.oms.model.newTradeId
+import com.ash.trading.oms.model.*
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -258,6 +255,17 @@ class OmsTradeOrderNewStateTest {
                 { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
                 { assertEquals(OmsTradeOrderState.NEW, updatedState) }
         )
+    }
+
+    @Test
+    fun `new state handling invalid traded amount`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TWO), mapOf(newTradeId() to BigDecimal.ONE))
+        val exception = assertThrows<IllegalStateException> { OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            AddTradeToTradeOrderEvent(newTradeId(), BigDecimal.ONE)
+        ) }
+
+        assertEquals("NEW Data should have ZERO used quantity", exception.message)
     }
 
 }

@@ -6,36 +6,44 @@ import com.ash.trading.oms.tradeorder.statemachine.handlers.OmsTradeOrderExecute
 import com.ash.trading.oms.tradeorder.statemachine.handlers.OmsTradeOrderNewStateHandler
 import com.ash.trading.oms.tradeorder.statemachine.handlers.OmsTradeOrderPartiallyExecutedStateHandler
 import com.ash.trading.oms.tradeorder.statemachine.handlers.OmsTradeOrderTerminalStateHandler
+import java.math.BigDecimal
 
 enum class OmsTradeOrderState {
 
     NEW {
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = OmsTradeOrderNewStateHandler.handleEvent(data, event)
+        override fun isValid(data: TradeOrderQuantities): Boolean = data.usedQuantity == BigDecimal.ZERO
     },
     PARTIALLY_EXECUTED {
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = OmsTradeOrderPartiallyExecutedStateHandler.handleEvent(data, event)
+        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
     },
     EXECUTED {
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = OmsTradeOrderExecutedStateHandler.handleEvent(data, event)
+        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
     },
     COMPLETED {
         private val handler = OmsTradeOrderTerminalStateHandler(COMPLETED)
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = handler.handleEvent(data, event)
+        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
     },
     CANCELLED {
         private val handler = OmsTradeOrderTerminalStateHandler(CANCELLED)
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = handler.handleEvent(data, event)
+        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
     },
     DELETED {
         private val handler = OmsTradeOrderTerminalStateHandler(DELETED)
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = handler.handleEvent(data, event)
+        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
     },
     ERROR {
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState = TODO()
+        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
     };
 
     abstract fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState
-    fun isValid(data: TradeOrderQuantities): Boolean = TODO()
+    abstract fun isValid(data: TradeOrderQuantities): Boolean
 }
 
 operator fun OmsTradeOrderState.contains(data: TradeOrderQuantities): Boolean = isValid(data)
