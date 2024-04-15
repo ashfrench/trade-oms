@@ -40,7 +40,7 @@ class OmsTradeOrderNewStateTest {
             )
         }
 
-        assertEquals("New Data should have ZERO used quantity", exception.message)
+        assertEquals("NEW Data should have ZERO used quantity", exception.message)
     }
 
     @Test
