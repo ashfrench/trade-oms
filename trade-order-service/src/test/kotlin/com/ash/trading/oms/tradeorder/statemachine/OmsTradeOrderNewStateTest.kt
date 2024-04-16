@@ -268,4 +268,15 @@ class OmsTradeOrderNewStateTest {
         assertEquals("NEW Data should have ZERO used quantity", exception.message)
     }
 
+    @Test
+    fun `new state handling invalid cancelled amount`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TWO), cancelledQuantity = CancelledQuantity(BigDecimal.TWO))
+        val exception = assertThrows<IllegalStateException> { OmsTradeOrderState.NEW.handleEvent(
+            tradeOrderQuantities,
+            AddTradeToTradeOrderEvent(newTradeId(), BigDecimal.ONE)
+        ) }
+
+        assertEquals("NEW Data should have ZERO used quantity", exception.message)
+    }
+
 }
