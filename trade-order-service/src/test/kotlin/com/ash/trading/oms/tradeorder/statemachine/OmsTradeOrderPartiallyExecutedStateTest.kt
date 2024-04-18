@@ -160,4 +160,18 @@ class OmsTradeOrderPartiallyExecutedStateTest {
 
         assertEquals("Partially Executed Data should have a positive used quantity and positive open quantity", exception.message)
     }
+
+    @Test
+    fun `can handle quantities with cancelled that are not in partially executed`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.ONE), cancelledQuantity = CancelledQuantity(BigDecimal.ONE))
+
+        val exception = assertThrows<IllegalStateException>("Invalid order type") {
+            OmsTradeOrderState.PARTIALLY_EXECUTED.handleEvent(
+                tradeOrderQuantities,
+                AddTradeToTradeOrderEvent(newTradeId(), BigDecimal.ONE)
+            )
+        }
+
+        assertEquals("Partially Executed Data should have a positive used quantity and positive open quantity", exception.message)
+    }
 }
