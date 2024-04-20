@@ -3,6 +3,7 @@ package com.ash.trading.oms.tradeorder.statemachine.handlers
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
 import com.ash.trading.oms.tradeorder.statemachine.TradeOrderQuantitiesState
+import com.ash.trading.oms.tradeorder.statemachine.contains
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 
@@ -11,6 +12,10 @@ object OmsTradeOrderExecutedStateHandler {
     private val logger = LoggerFactory.getLogger(OmsTradeOrderExecutedStateHandler::class.java)
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
+        check (data in OmsTradeOrderState.EXECUTED) {
+            "${OmsTradeOrderState.EXECUTED} Data should have ZERO open quantity"
+        }
+
         try {
             when(event) {
                 is AddTradeToTradeOrderEvent -> TODO()
