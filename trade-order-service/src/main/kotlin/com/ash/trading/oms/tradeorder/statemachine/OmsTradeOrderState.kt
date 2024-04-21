@@ -20,7 +20,7 @@ enum class OmsTradeOrderState {
     },
     EXECUTED {
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = OmsTradeOrderExecutedStateHandler.handleEvent(data, event)
-        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
+        override fun isValid(data: TradeOrderQuantities): Boolean = data.openQuantity == BigDecimal.ZERO && data.executedQuantity > BigDecimal.ZERO
     },
     COMPLETED {
         private val handler = OmsTradeOrderTerminalStateHandler(COMPLETED)

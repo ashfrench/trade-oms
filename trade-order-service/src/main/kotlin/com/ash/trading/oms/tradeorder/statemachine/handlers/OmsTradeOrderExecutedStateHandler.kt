@@ -13,7 +13,7 @@ object OmsTradeOrderExecutedStateHandler {
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
         check (data in OmsTradeOrderState.EXECUTED) {
-            "${OmsTradeOrderState.EXECUTED} Data should have ZERO open quantity"
+            "${OmsTradeOrderState.EXECUTED} Data should have ZERO open quantity and executed quantity GREATER than ZERO"
         }
 
         try {
