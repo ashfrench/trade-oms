@@ -16,7 +16,7 @@ enum class OmsTradeOrderState {
     },
     PARTIALLY_EXECUTED {
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = OmsTradeOrderPartiallyExecutedStateHandler.handleEvent(data, event)
-        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
+        override fun isValid(data: TradeOrderQuantities): Boolean = data.executedQuantity > BigDecimal.ZERO && data.openQuantity > BigDecimal.ZERO
     },
     EXECUTED {
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = OmsTradeOrderExecutedStateHandler.handleEvent(data, event)

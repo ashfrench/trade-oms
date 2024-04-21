@@ -4,6 +4,7 @@ import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.tradeorder.statemachine.OmsTradeOrderState
 import com.ash.trading.oms.tradeorder.statemachine.TradeOrderQuantitiesState
+import com.ash.trading.oms.tradeorder.statemachine.contains
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
@@ -13,7 +14,7 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
     private val logger = LoggerFactory.getLogger(OmsTradeOrderPartiallyExecutedStateHandler::class.java)
 
     fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
-        check(data.executedQuantity > BigDecimal.ZERO && data.openQuantity > BigDecimal.ZERO) {
+        check(data in OmsTradeOrderState.PARTIALLY_EXECUTED) {
             "Partially Executed Data should have a positive used quantity and positive open quantity"
         }
 
