@@ -1,6 +1,9 @@
 package com.ash.trading.oms.tradeorder.statemachine
 
-import com.ash.trading.oms.model.*
+import com.ash.trading.oms.model.CancelledQuantity
+import com.ash.trading.oms.model.TradeOrderQuantities
+import com.ash.trading.oms.model.newOrderId
+import com.ash.trading.oms.model.newTradeId
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
