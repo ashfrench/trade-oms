@@ -26,4 +26,18 @@ class OmsTradeOrderExecutedStateTest {
         assertEquals("EXECUTED Data should have ZERO open quantity and executed quantity GREATER than ZERO", exception.message)
     }
 
+    @Test
+    fun `can handle not being only partially executed state correctly`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(newTradeId() to BigDecimal.ONE))
+
+        val exception = assertThrows<IllegalStateException>("Invalid order type") {
+            OmsTradeOrderState.EXECUTED.handleEvent(
+                tradeOrderQuantities,
+                AddTradeToTradeOrderEvent(newTradeId(), BigDecimal.ONE)
+            )
+        }
+
+        assertEquals("EXECUTED Data should have ZERO open quantity and executed quantity GREATER than ZERO", exception.message)
+    }
+
 }
