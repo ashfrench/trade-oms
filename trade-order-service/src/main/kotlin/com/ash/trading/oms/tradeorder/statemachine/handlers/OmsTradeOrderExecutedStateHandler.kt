@@ -16,21 +16,27 @@ object OmsTradeOrderExecutedStateHandler {
             "${OmsTradeOrderState.EXECUTED} Data should have ZERO open quantity and executed quantity GREATER than ZERO"
         }
 
-        try {
+        return try {
             when(event) {
-                is AddTradeToTradeOrderEvent -> TODO()
-                is CancelTradeOrderEvent -> TODO()
-                is AddOrderToTradeOrderEvent -> TODO()
-                is UpdateTradeForTradeOrderEvent -> TODO()
+                is UpdateTradeForTradeOrderEvent -> handleUpdateTradeEvent(data, event)
+                is RemoveTradeFromTradeOrderEvent -> handleRemoveTradeEvent(data, event)
                 else -> {
                     logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.EXECUTED}] state")
-                    return data to OmsTradeOrderState.EXECUTED
+                    data to OmsTradeOrderState.EXECUTED
                 }
             }
         } catch (e: Exception) {
             logger.error("Error when handling Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.EXECUTED}] state", e)
-            return data to OmsTradeOrderState.EXECUTED
+            data to OmsTradeOrderState.EXECUTED
         }
+    }
+
+    private fun handleUpdateTradeEvent(data: TradeOrderQuantities, event: UpdateTradeForTradeOrderEvent): TradeOrderQuantitiesState {
+        TODO("Not yet implemented")
+    }
+
+    private fun handleRemoveTradeEvent(data: TradeOrderQuantities, event: RemoveTradeFromTradeOrderEvent): TradeOrderQuantitiesState {
+        TODO("Not yet implemented")
     }
 
 }
