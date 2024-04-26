@@ -6,6 +6,7 @@ import com.ash.trading.oms.tradeorder.statemachine.TradeOrderQuantitiesState
 import com.ash.trading.oms.tradeorder.statemachine.contains
 import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
+import java.math.BigDecimal
 
 object OmsTradeOrderExecutedStateHandler {
 
@@ -32,11 +33,41 @@ object OmsTradeOrderExecutedStateHandler {
     }
 
     private fun handleUpdateTradeEvent(data: TradeOrderQuantities, event: UpdateTradeForTradeOrderEvent): TradeOrderQuantitiesState {
-        TODO("Not yet implemented")
+        if (event.executedQuantity <= BigDecimal.ZERO) {
+            throw RuntimeException("Executed Quantity added must be a positive value")
+        }
+
+        val updatedQuantities = data.tradeQuantities.toMutableMap()
+        updatedQuantities.computeIfPresent(event.tradeId) { _,_ -> event.executedQuantity }
+
+        val updatedData = data.copy(tradeQuantities = updatedQuantities)
+
+        val updateState = if (updatedData.openQuantity == BigDecimal.ZERO) {
+            OmsTradeOrderState.EXECUTED
+        } else {
+            OmsTradeOrderState.PARTIALLY_EXECUTED
+        }
+
+        return updatedData to updateState
     }
 
     private fun handleRemoveTradeEvent(data: TradeOrderQuantities, event: RemoveTradeFromTradeOrderEvent): TradeOrderQuantitiesState {
-        TODO("Not yet implemented")
+        if (!data.tradeQuantities.containsKey(event.tradeId)) {
+            return data to OmsTradeOrderState.PARTIALLY_EXECUTED
+        }
+
+        val updatedQuantities = data.tradeQuantities.toMutableMap()
+        updatedQuantities.remove(event.tradeId)
+
+        val updatedData = data.copy(tradeQuantities = updatedQuantities)
+
+        val updateState = if (updatedData.usedQuantity == BigDecimal.ZERO) {
+            OmsTradeOrderState.NEW
+        } else {
+            OmsTradeOrderState.PARTIALLY_EXECUTED
+        }
+
+        return updatedData to updateState
     }
 
 }
