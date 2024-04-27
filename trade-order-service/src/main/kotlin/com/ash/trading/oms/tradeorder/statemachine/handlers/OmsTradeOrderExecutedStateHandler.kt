@@ -19,6 +19,7 @@ object OmsTradeOrderExecutedStateHandler {
 
         return try {
             when(event) {
+                is UpdateOrderForTradeOrderEvent -> handleOrderEvent(data, event)
                 is UpdateTradeForTradeOrderEvent -> handleUpdateTradeEvent(data, event)
                 is RemoveTradeFromTradeOrderEvent -> handleRemoveTradeEvent(data, event)
                 else -> {
@@ -68,6 +69,10 @@ object OmsTradeOrderExecutedStateHandler {
         }
 
         return updatedData to updateState
+    }
+
+    private fun handleOrderEvent(data: TradeOrderQuantities, event: UpdateOrderForTradeOrderEvent): Pair<TradeOrderQuantities, OmsTradeOrderState> {
+        TODO("Not yet implemented")
     }
 
 }
