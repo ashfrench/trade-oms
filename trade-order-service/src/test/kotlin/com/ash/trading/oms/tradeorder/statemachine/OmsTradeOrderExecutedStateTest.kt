@@ -5,6 +5,7 @@ import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.model.newOrderId
 import com.ash.trading.oms.model.newTradeId
 import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
+import com.ash.trading.oms.tradeorder.statemachine.event.RemoveTradeFromTradeOrderEvent
 import com.ash.trading.oms.tradeorder.statemachine.event.UpdateTradeForTradeOrderEvent
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -57,6 +58,25 @@ class OmsTradeOrderExecutedStateTest {
             { assertEquals(BigDecimal.TWO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
             { assertEquals(CancelledQuantity(BigDecimal.ZERO), updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
             { assertEquals(BigDecimal.TWO, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 1" } },
+            { assertEquals(OmsTradeOrderState.PARTIALLY_EXECUTED, updatedState) }
+        )
+    }
+
+    @Test
+    fun `can move to partially executed back to when removing a trade and leaving remaining trades`() {
+        val tradeId = newTradeId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(tradeId to BigDecimal(9), newTradeId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            RemoveTradeFromTradeOrderEvent(tradeId)
+        )
+
+        assertAll(
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal(9), updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 9" } },
+            { assertEquals(BigDecimal.ONE, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 1" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ONE, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 1" } },
             { assertEquals(OmsTradeOrderState.PARTIALLY_EXECUTED, updatedState) }
         )
     }
