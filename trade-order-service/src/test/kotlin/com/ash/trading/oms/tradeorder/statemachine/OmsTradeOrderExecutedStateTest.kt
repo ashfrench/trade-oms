@@ -80,5 +80,23 @@ class OmsTradeOrderExecutedStateTest {
             { assertEquals(OmsTradeOrderState.PARTIALLY_EXECUTED, updatedState) }
         )
     }
+    @Test
+    fun `can transition from executed back to new when removing a trade`() {
+        val tradeId = newTradeId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(tradeId to BigDecimal.TEN))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            RemoveTradeFromTradeOrderEvent(tradeId)
+        )
+
+        assertAll(
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.totalQuantity) { "Total Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.TEN, updatedOrderQuantity.openQuantity) { "Open Quantity should be equal 10" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.executedQuantity) { "Executed Quantity should be equal 0" } },
+            { assertEquals(CancelledQuantity(BigDecimal.ZERO), updatedOrderQuantity.cancelledQuantity) { "Cancelled Quantity should be equal 0" } },
+            { assertEquals(BigDecimal.ZERO, updatedOrderQuantity.usedQuantity) { "Used Quantity should be equal 0" } },
+            { assertEquals(OmsTradeOrderState.NEW, updatedState) }
+        )
+    }
 
 }
