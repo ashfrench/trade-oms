@@ -63,6 +63,21 @@ class OmsTradeOrderExecutedStateTest {
     }
 
     @Test
+    fun `cannot update executed trade with invalid value`() {
+        val tradeId = newTradeId()
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TWO), mapOf(tradeId to BigDecimal.TWO))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            UpdateTradeForTradeOrderEvent(tradeId, BigDecimal.TEN)
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.EXECUTED, updatedState) }
+        )
+    }
+
+    @Test
     fun `can move to partially executed back to when removing a trade and leaving remaining trades`() {
         val tradeId = newTradeId()
         val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(tradeId to BigDecimal(9), newTradeId() to BigDecimal.ONE))
