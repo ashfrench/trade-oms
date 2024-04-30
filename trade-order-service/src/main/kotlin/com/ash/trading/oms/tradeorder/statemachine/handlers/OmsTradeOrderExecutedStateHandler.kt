@@ -54,7 +54,7 @@ object OmsTradeOrderExecutedStateHandler {
 
     private fun handleRemoveTradeEvent(data: TradeOrderQuantities, event: RemoveTradeFromTradeOrderEvent): TradeOrderQuantitiesState {
         if (!data.tradeQuantities.containsKey(event.tradeId)) {
-            return data to OmsTradeOrderState.PARTIALLY_EXECUTED
+            return data to OmsTradeOrderState.EXECUTED
         }
 
         val updatedQuantities = data.tradeQuantities.toMutableMap()

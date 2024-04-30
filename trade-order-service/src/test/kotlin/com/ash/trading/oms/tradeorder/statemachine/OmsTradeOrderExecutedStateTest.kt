@@ -114,4 +114,18 @@ class OmsTradeOrderExecutedStateTest {
         )
     }
 
+    @Test
+    fun `removing a trade which does not exist`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(newTradeId() to BigDecimal.TEN))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            RemoveTradeFromTradeOrderEvent(newTradeId())
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.EXECUTED, updatedState) }
+        )
+    }
+
 }
