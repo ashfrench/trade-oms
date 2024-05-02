@@ -142,4 +142,18 @@ class OmsTradeOrderExecutedStateTest {
         )
     }
 
+    @Test
+    fun `can handle unsupported event`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(newTradeId() to BigDecimal.TEN))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            AddTradeToTradeOrderEvent(newTradeId(), BigDecimal.TWO)
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.EXECUTED, updatedState) }
+        )
+    }
+
 }
