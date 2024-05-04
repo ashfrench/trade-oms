@@ -4,10 +4,7 @@ import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.model.newOrderId
 import com.ash.trading.oms.model.newTradeId
-import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
-import com.ash.trading.oms.tradeorder.statemachine.event.CancelTradeOrderEvent
-import com.ash.trading.oms.tradeorder.statemachine.event.RemoveTradeFromTradeOrderEvent
-import com.ash.trading.oms.tradeorder.statemachine.event.UpdateTradeForTradeOrderEvent
+import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -173,5 +170,19 @@ class OmsTradeOrderPartiallyExecutedStateTest {
         }
 
         assertEquals("Partially Executed Data should have a positive used quantity and positive open quantity", exception.message)
+    }
+
+    @Test
+    fun `can handle unsupported event`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(newTradeId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.PARTIALLY_EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            AddOrderToTradeOrderEvent(newTradeId(), BigDecimal.TWO)
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.PARTIALLY_EXECUTED, updatedState) }
+        )
     }
 }
