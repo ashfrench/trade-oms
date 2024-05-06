@@ -53,6 +53,20 @@ class OmsTradeOrderPartiallyExecutedStateTest {
     }
 
     @Test
+    fun `remove a trade that is not in the trade order`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(newTradeId() to BigDecimal.ONE))
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.PARTIALLY_EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            RemoveTradeFromTradeOrderEvent(newTradeId())
+        )
+
+        assertAll(
+            { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.PARTIALLY_EXECUTED, updatedState) }
+        )
+    }
+
+    @Test
     fun `can stay in partially executed back to when removing a trade and leaving remaining trades`() {
         val tradeId = newTradeId()
         val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(tradeId to BigDecimal.ONE, newTradeId() to BigDecimal.ONE))
