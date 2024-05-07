@@ -36,8 +36,8 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
     }
 
     private fun handleAddTrade(data: TradeOrderQuantities, event: AddTradeToTradeOrderEvent): TradeOrderQuantitiesState {
-        if (event.executedQuantity < BigDecimal.ZERO) {
-            throw RuntimeException("Executed Quantity added must be a positive value")
+        check (event.executedQuantity > BigDecimal.ZERO) {
+            "Executed Quantity added must be a positive value"
         }
 
         val updatedQuantities = data.tradeQuantities.toMutableMap()
@@ -84,8 +84,8 @@ object OmsTradeOrderPartiallyExecutedStateHandler {
     }
 
     private fun handleUpdateTrade(data: TradeOrderQuantities, event: UpdateTradeForTradeOrderEvent): TradeOrderQuantitiesState {
-        if (event.executedQuantity <= BigDecimal.ZERO) {
-            throw RuntimeException("Executed Quantity added must be a positive value")
+        check (event.executedQuantity > BigDecimal.ZERO) {
+            "Executed Quantity added must be a positive value"
         }
 
         val updatedQuantities = data.tradeQuantities.toMutableMap()
