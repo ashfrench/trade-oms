@@ -3,6 +3,8 @@ package com.ash.trading.oms.order.statemachine
 import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.model.newTradeId
+import com.ash.trading.oms.model.newUserId
+import com.ash.trading.oms.order.statemachine.events.AdminFixEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
 import com.ash.trading.oms.order.statemachine.events.TraderExecutedEvent
 import com.ash.trading.oms.order.statemachine.events.TraderWorkingEvent
@@ -59,6 +61,24 @@ class OmsOrderWorkedStateTest {
         val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
             orderQuantity,
             TraderWorkingEvent(newTradeId(), BigDecimal.TEN)
+        )
+
+        assertAll(
+            { assertEquals(updatedOrderQuantity, orderQuantity) },
+            { assertEquals(OmsOrderState.WORKED, updatedState) }
+        )
+    }
+
+    @Test
+    fun `can handle invalid event from worked`() {
+        val orderQuantity = OrderQuantity(BigDecimal.TWO, workedQuantity = BigDecimal.TWO)
+        val (updatedOrderQuantity, updatedState) = OmsOrderState.WORKED.handleEvent(
+            orderQuantity,
+            AdminFixEvent(
+                newUserId(),
+                orderQuantity,
+                OmsOrderState.NEW
+            )
         )
 
         assertAll(
