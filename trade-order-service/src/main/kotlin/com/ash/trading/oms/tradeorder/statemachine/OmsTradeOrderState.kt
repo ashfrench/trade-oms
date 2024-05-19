@@ -1,6 +1,7 @@
 package com.ash.trading.oms.tradeorder.statemachine
 
 import com.ash.trading.oms.model.TradeOrderQuantities
+import com.ash.trading.oms.model.compareTo
 import com.ash.trading.oms.tradeorder.statemachine.event.OmsTradeOrderEvent
 import com.ash.trading.oms.tradeorder.statemachine.handlers.OmsTradeOrderExecutedStateHandler
 import com.ash.trading.oms.tradeorder.statemachine.handlers.OmsTradeOrderNewStateHandler
@@ -30,7 +31,7 @@ enum class OmsTradeOrderState {
     CANCELLED {
         private val handler = OmsTradeOrderTerminalStateHandler(CANCELLED)
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = handler.handleEvent(data, event)
-        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
+        override fun isValid(data: TradeOrderQuantities): Boolean = data.cancelledQuantity > BigDecimal.ZERO
     },
     DELETED {
         private val handler = OmsTradeOrderTerminalStateHandler(DELETED)
