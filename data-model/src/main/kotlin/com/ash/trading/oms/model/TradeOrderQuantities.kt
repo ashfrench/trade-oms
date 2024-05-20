@@ -1,11 +1,13 @@
 package com.ash.trading.oms.model
 
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 data class TradeOrderQuantities(
     val orderQuantities: Map<OrderId, WorkedQuantity>,
     val tradeQuantities: Map<TradeId, TradeQuantity> = emptyMap(),
-    val cancelledQuantity: CancelledQuantity = CancelledQuantity(BigDecimal.ZERO)
+    val cancelledQuantity: CancelledQuantity = CancelledQuantity(BigDecimal.ZERO),
+    val completedTime: LocalDateTime? = null
 ) {
     val totalQuantity: TotalQuantity = orderQuantities.values.sumOf { it }
     val executedQuantity: ExecutedQuantity = tradeQuantities.values.sumOf { it }
@@ -26,6 +28,7 @@ data class TradeOrderQuantities(
         check(totalQuantity >= cancelledQuantity) { "Total Quantity [$totalQuantity] must be greater than or equal to Cancelled Quantity [$cancelledQuantity]"}
 
         check(totalQuantity >= usedQuantity) { "Total Quantity [$totalQuantity] must be greater than the total of Executed [$executedQuantity] and Cancelled [$cancelledQuantity] quantities = [${usedQuantity}]" }
+        check(completedTime?.let { openQuantity == BigDecimal.ZERO }?: true) { "Open Quantity must be ZERO when completed" }
     }
 
 }

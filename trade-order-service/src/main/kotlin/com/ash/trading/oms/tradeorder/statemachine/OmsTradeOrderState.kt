@@ -26,7 +26,7 @@ enum class OmsTradeOrderState {
     COMPLETED {
         private val handler = OmsTradeOrderTerminalStateHandler(COMPLETED)
         override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent) = handler.handleEvent(data, event)
-        override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
+        override fun isValid(data: TradeOrderQuantities): Boolean = data.completedTime != null
     },
     CANCELLED {
         private val handler = OmsTradeOrderTerminalStateHandler(CANCELLED)
