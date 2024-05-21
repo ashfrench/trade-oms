@@ -21,6 +21,7 @@ object OmsTradeOrderExecutedStateHandler {
             when(event) {
                 is UpdateTradeForTradeOrderEvent -> handleUpdateTradeEvent(data, event)
                 is RemoveTradeFromTradeOrderEvent -> handleRemoveTradeEvent(data, event)
+                is CompletedTradeOrderEvent -> handleCompletedEvent(data, event)
                 else -> {
                     logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from [${OmsTradeOrderState.EXECUTED}] state")
                     data to OmsTradeOrderState.EXECUTED
@@ -65,5 +66,8 @@ object OmsTradeOrderExecutedStateHandler {
 
         return updatedData to updateState
     }
+
+    private fun handleCompletedEvent(data: TradeOrderQuantities, event: CompletedTradeOrderEvent) =
+        data.copy(completedTime = event.completedTime) to OmsTradeOrderState.COMPLETED
 
 }

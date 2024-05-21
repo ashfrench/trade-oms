@@ -5,6 +5,7 @@ import com.ash.trading.oms.model.TradeOrderQuantities
 import com.ash.trading.oms.model.newOrderId
 import com.ash.trading.oms.model.newTradeId
 import com.ash.trading.oms.tradeorder.statemachine.event.AddTradeToTradeOrderEvent
+import com.ash.trading.oms.tradeorder.statemachine.event.CompletedTradeOrderEvent
 import com.ash.trading.oms.tradeorder.statemachine.event.RemoveTradeFromTradeOrderEvent
 import com.ash.trading.oms.tradeorder.statemachine.event.UpdateTradeForTradeOrderEvent
 import org.junit.jupiter.api.Assertions.assertAll
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 class OmsTradeOrderExecutedStateTest {
 
@@ -154,6 +156,22 @@ class OmsTradeOrderExecutedStateTest {
         assertAll(
             { assertEquals(tradeOrderQuantities, updatedOrderQuantity) },
             { assertEquals(OmsTradeOrderState.EXECUTED, updatedState) }
+        )
+    }
+
+    @Test
+    fun `can handle completed event`() {
+        val tradeOrderQuantities = TradeOrderQuantities(mapOf(newOrderId() to BigDecimal.TEN), mapOf(newTradeId() to BigDecimal.TEN))
+        val completedTime = LocalDateTime.now()
+        val (updatedOrderQuantity, updatedState) = OmsTradeOrderState.EXECUTED.handleEvent(
+            tradeOrderQuantities,
+            CompletedTradeOrderEvent(completedTime)
+        )
+
+        val expected = tradeOrderQuantities.copy(completedTime = completedTime)
+        assertAll(
+            { assertEquals(expected, updatedOrderQuantity) },
+            { assertEquals(OmsTradeOrderState.COMPLETED, updatedState) }
         )
     }
 
