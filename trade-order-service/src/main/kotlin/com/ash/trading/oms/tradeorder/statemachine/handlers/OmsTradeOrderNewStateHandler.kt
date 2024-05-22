@@ -9,15 +9,11 @@ import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 
-object OmsTradeOrderNewStateHandler {
+object OmsTradeOrderNewStateHandler: TradeOrderStateEventHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderNewStateHandler::class.java)
 
-    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
-        check (data in OmsTradeOrderState.NEW) {
-            "${OmsTradeOrderState.NEW} Data should have ZERO used quantity"
-        }
-
+    override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
         try {
             return when (event) {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)

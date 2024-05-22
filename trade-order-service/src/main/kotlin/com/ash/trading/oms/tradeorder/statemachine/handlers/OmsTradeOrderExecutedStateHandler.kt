@@ -8,15 +8,11 @@ import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 
-object OmsTradeOrderExecutedStateHandler {
+object OmsTradeOrderExecutedStateHandler: TradeOrderStateEventHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderExecutedStateHandler::class.java)
 
-    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
-        check (data in OmsTradeOrderState.EXECUTED) {
-            "${OmsTradeOrderState.EXECUTED} Data should have ZERO open quantity and executed quantity GREATER than ZERO"
-        }
-
+    override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
         return try {
             when(event) {
                 is UpdateTradeForTradeOrderEvent -> handleUpdateTradeEvent(data, event)

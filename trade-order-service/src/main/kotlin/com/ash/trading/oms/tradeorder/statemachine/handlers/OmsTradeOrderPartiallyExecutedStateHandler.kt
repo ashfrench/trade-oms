@@ -9,15 +9,11 @@ import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 
-object OmsTradeOrderPartiallyExecutedStateHandler {
+object OmsTradeOrderPartiallyExecutedStateHandler: TradeOrderStateEventHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderPartiallyExecutedStateHandler::class.java)
 
-    fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
-        check(data in OmsTradeOrderState.PARTIALLY_EXECUTED) {
-            "Partially Executed Data should have a positive used quantity and positive open quantity"
-        }
-
+    override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
         try {
             return when(event) {
                 is AddTradeToTradeOrderEvent -> handleAddTrade(data, event)

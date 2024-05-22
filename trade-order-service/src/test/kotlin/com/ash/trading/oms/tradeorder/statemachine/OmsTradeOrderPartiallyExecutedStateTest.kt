@@ -216,7 +216,7 @@ class OmsTradeOrderPartiallyExecutedStateTest {
             )
         }
 
-        assertEquals("Partially Executed Data should have a positive used quantity and positive open quantity", exception.message)
+        assertEquals("PARTIALLY_EXECUTED Data should have a positive used quantity and positive open quantity", exception.message)
     }
 
     @Test
@@ -230,7 +230,7 @@ class OmsTradeOrderPartiallyExecutedStateTest {
             )
         }
 
-        assertEquals("Partially Executed Data should have a positive used quantity and positive open quantity", exception.message)
+        assertEquals("PARTIALLY_EXECUTED Data should have a positive used quantity and positive open quantity", exception.message)
     }
 
     @Test
