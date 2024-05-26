@@ -11,11 +11,11 @@ import com.ash.trading.oms.order.statemachine.events.TraderExecutedEvent
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 
-object OmsOrderPartiallyExecutedStateHandler {
+object OmsOrderPartiallyExecutedStateHandler: OmsOrderStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
-    fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
+    override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
         check (data in OmsOrderState.PARTIALLY_EXECUTED) {
             "${OmsOrderState.PARTIALLY_EXECUTED} Data should have executed quantity greater than ZERO and less than the total quantity"
         }

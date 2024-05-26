@@ -10,11 +10,11 @@ import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
 import com.ash.trading.oms.order.statemachine.events.TraderWorkingEvent
 import org.slf4j.LoggerFactory
 
-object OmsOrderNewStateHandler {
+object OmsOrderNewStateHandler: OmsOrderStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderNewStateHandler::class.java)
 
-    fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
+    override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
         check (data in OmsOrderState.NEW) {
             "${OmsOrderState.NEW} Data should have ZERO used quantity"
         }

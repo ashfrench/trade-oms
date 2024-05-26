@@ -7,11 +7,11 @@ import com.ash.trading.oms.order.statemachine.contains
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import org.slf4j.LoggerFactory
 
-object OmsOrderExecutedStateHandler {
+object OmsOrderExecutedStateHandler: OmsOrderStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderCancelledStateHandler::class.java)
 
-    fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
+    override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
         check(data in OmsOrderState.EXECUTED) {
             "${OmsOrderState.EXECUTED} data should have executed quantity equal to the total quantity"
         }

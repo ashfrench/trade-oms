@@ -12,11 +12,11 @@ import com.ash.trading.oms.order.statemachine.events.TraderWorkingEvent
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 
-object OmsOrderWorkedStateHandler {
+object OmsOrderWorkedStateHandler: OmsOrderStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
-    fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
+    override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
         check (data in OmsOrderState.WORKED) {
             "${OmsOrderState.WORKED} Data should have worked quantity greater than ZERO and open quantity greater than ZERO"
         }
