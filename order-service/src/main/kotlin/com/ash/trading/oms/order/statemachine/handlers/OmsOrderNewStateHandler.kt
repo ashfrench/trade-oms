@@ -4,7 +4,6 @@ import com.ash.trading.oms.model.CancelledQuantity
 import com.ash.trading.oms.model.OrderQuantity
 import com.ash.trading.oms.order.statemachine.OmsOrderState
 import com.ash.trading.oms.order.statemachine.OrderQuantityState
-import com.ash.trading.oms.order.statemachine.contains
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import com.ash.trading.oms.order.statemachine.events.OrderCancelledEvent
 import com.ash.trading.oms.order.statemachine.events.TraderWorkingEvent
