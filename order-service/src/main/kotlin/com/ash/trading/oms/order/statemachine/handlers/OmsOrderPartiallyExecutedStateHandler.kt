@@ -16,9 +16,7 @@ object OmsOrderPartiallyExecutedStateHandler: OmsOrderStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
     override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check (data in OmsOrderState.PARTIALLY_EXECUTED) {
-            "${OmsOrderState.PARTIALLY_EXECUTED} Data should have executed quantity greater than ZERO and less than the total quantity"
-        }
+
 
         return try {
             when (event) {

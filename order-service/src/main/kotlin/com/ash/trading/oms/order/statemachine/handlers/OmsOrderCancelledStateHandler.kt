@@ -12,9 +12,6 @@ object OmsOrderCancelledStateHandler: OmsOrderStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderCancelledStateHandler::class.java)
 
     override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check(data in OmsOrderState.CANCELLED) {
-            "${OmsOrderState.CANCELLED} data should have some cancelled quantity"
-        }
         logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.CANCELLED} state")
         return data to OmsOrderState.CANCELLED
     }

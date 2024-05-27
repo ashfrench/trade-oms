@@ -15,9 +15,7 @@ object OmsOrderNewStateHandler: OmsOrderStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderNewStateHandler::class.java)
 
     override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check (data in OmsOrderState.NEW) {
-            "${OmsOrderState.NEW} Data should have ZERO used quantity"
-        }
+
 
         return try {
             when (event) {

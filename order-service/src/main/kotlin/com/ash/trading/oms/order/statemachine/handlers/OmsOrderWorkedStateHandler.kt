@@ -17,10 +17,6 @@ object OmsOrderWorkedStateHandler: OmsOrderStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 
     override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check (data in OmsOrderState.WORKED) {
-            "${OmsOrderState.WORKED} Data should have worked quantity greater than ZERO and open quantity greater than ZERO"
-        }
-
         return try {
             when (event) {
                 is TraderExecutedEvent -> handleTradeExecution(data, event)

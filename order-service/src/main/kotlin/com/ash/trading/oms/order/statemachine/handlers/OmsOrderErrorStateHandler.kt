@@ -13,11 +13,6 @@ object OmsOrderErrorStateHandler: OmsOrderStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderErrorStateHandler::class.java)
 
     override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check(data in OmsOrderState.ERROR) {
-            val validState = OmsOrderState.entries.first { it.isValid(data) }
-            "${OmsOrderState.ERROR} data should not be valid for another state $validState"
-        }
-
         return try {
             when (event) {
                 is AdminFixEvent -> handleAdminFixEvent(data, event)

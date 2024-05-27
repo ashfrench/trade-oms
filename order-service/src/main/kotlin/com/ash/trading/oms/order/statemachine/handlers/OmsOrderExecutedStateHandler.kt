@@ -12,10 +12,6 @@ object OmsOrderExecutedStateHandler: OmsOrderStateHandler {
     private val logger = LoggerFactory.getLogger(OmsOrderCancelledStateHandler::class.java)
 
     override fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
-        check(data in OmsOrderState.EXECUTED) {
-            "${OmsOrderState.EXECUTED} data should have executed quantity equal to the total quantity"
-        }
-
         logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from ${OmsOrderState.EXECUTED} state")
         return data to OmsOrderState.EXECUTED
     }
