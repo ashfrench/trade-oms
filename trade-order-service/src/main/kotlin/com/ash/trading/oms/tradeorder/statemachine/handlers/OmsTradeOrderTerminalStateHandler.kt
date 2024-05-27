@@ -6,7 +6,7 @@ import com.ash.trading.oms.tradeorder.statemachine.TradeOrderQuantitiesState
 import com.ash.trading.oms.tradeorder.statemachine.event.OmsTradeOrderEvent
 import org.slf4j.LoggerFactory
 
-class OmsTradeOrderTerminalStateHandler(private val state: OmsTradeOrderState): TradeOrderStateEventHandler {
+internal class OmsTradeOrderTerminalStateHandler(private val state: OmsTradeOrderState): TradeOrderStateEventHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderTerminalStateHandler::class.java)
 

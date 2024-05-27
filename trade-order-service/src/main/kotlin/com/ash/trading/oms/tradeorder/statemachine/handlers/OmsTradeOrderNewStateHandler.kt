@@ -9,7 +9,7 @@ import com.ash.trading.oms.tradeorder.statemachine.event.*
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 
-object OmsTradeOrderNewStateHandler: TradeOrderStateEventHandler {
+internal data object OmsTradeOrderNewStateHandler: TradeOrderStateEventHandler {
 
     private val logger = LoggerFactory.getLogger(OmsTradeOrderNewStateHandler::class.java)
 

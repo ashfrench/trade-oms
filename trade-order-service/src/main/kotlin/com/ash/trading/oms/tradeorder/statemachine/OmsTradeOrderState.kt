@@ -29,24 +29,24 @@ enum class OmsTradeOrderState {
         }
     },
     COMPLETED {
-        override val handler = OmsTradeOrderTerminalStateHandler(COMPLETED)
+        override val handler: TradeOrderStateEventHandler = OmsTradeOrderTerminalStateHandler(COMPLETED)
         override fun isValid(data: TradeOrderQuantities): Boolean = data.completedTime != null
         override fun validate(data: TradeOrderQuantities) = check (data in COMPLETED) {
             "$COMPLETED Data should have ZERO open quantity and Completed Time NOT NULL"
         }
     },
     CANCELLED {
-        override val handler = OmsTradeOrderTerminalStateHandler(CANCELLED)
+        override val handler: TradeOrderStateEventHandler = OmsTradeOrderTerminalStateHandler(CANCELLED)
         override fun isValid(data: TradeOrderQuantities): Boolean = data.cancelledQuantity > BigDecimal.ZERO
         override fun validate(data: TradeOrderQuantities) = check (data in CANCELLED) { "$CANCELLED Data should have ZERO open quantity and cancelled time not null" }
     },
     DELETED {
-        override val handler = OmsTradeOrderTerminalStateHandler(DELETED)
+        override val handler: TradeOrderStateEventHandler = OmsTradeOrderTerminalStateHandler(DELETED)
         override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
         override fun validate(data: TradeOrderQuantities) = TODO()
     },
     ERROR {
-        override val handler = OmsTradeOrderTerminalStateHandler(ERROR)
+        override val handler: TradeOrderStateEventHandler = OmsTradeOrderTerminalStateHandler(ERROR)
         override fun isValid(data: TradeOrderQuantities): Boolean = TODO()
         override fun validate(data: TradeOrderQuantities) = TODO()
     };
