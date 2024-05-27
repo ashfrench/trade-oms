@@ -11,8 +11,6 @@ internal class OmsTradeOrderTerminalStateHandler(private val state: OmsTradeOrde
     private val logger = LoggerFactory.getLogger(OmsTradeOrderTerminalStateHandler::class.java)
 
     override fun handleEvent(data: TradeOrderQuantities, event: OmsTradeOrderEvent): TradeOrderQuantitiesState {
-        state.validate(data)
-
         logger.warn("Invalid Event Type [${event.javaClass.simpleName}] from [$state] state")
         return data to state
     }
