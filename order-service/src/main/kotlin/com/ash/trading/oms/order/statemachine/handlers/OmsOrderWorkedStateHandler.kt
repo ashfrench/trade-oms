@@ -11,7 +11,7 @@ import com.ash.trading.oms.order.statemachine.events.TraderWorkingEvent
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 
-object OmsOrderWorkedStateHandler: OmsOrderStateHandler {
+internal data object OmsOrderWorkedStateHandler: OmsOrderStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderWorkedStateHandler::class.java)
 

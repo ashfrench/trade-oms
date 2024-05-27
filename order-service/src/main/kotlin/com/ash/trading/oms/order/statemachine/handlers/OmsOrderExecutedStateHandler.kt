@@ -6,7 +6,7 @@ import com.ash.trading.oms.order.statemachine.OrderQuantityState
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import org.slf4j.LoggerFactory
 
-object OmsOrderExecutedStateHandler: OmsOrderStateHandler {
+internal data object OmsOrderExecutedStateHandler: OmsOrderStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderCancelledStateHandler::class.java)
 

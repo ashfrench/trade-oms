@@ -7,7 +7,7 @@ import com.ash.trading.oms.order.statemachine.events.AdminFixEvent
 import com.ash.trading.oms.order.statemachine.events.OmsOrderEvent
 import org.slf4j.LoggerFactory
 
-object OmsOrderErrorStateHandler: OmsOrderStateHandler {
+internal data object OmsOrderErrorStateHandler: OmsOrderStateHandler {
 
     private val logger = LoggerFactory.getLogger(OmsOrderErrorStateHandler::class.java)
 
