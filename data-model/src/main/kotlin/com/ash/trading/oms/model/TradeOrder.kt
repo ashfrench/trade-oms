@@ -7,7 +7,7 @@ data class TradeOrder(
     val tradeOrderId: TradeOrderId = newTradeOrderId(),
     val traderId: TraderId,
     val orderQuantities: Map<OrderId, WorkedQuantity>,
-    val tradeQuantities: Map<TradeId, TradeQuantity> = emptyMap(),
+    val tradeQuantities: Map<TradeId, TradedQuantity> = emptyMap(),
     val tradeOrderState: TradeOrderState = TradeOrderState.NEW,
     val reportedDate: LocalDate? = null
 ) {

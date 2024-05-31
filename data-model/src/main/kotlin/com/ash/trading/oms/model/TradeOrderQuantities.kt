@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class TradeOrderQuantities(
     val orderQuantities: Map<OrderId, WorkedQuantity>,
-    val tradeQuantities: Map<TradeId, TradeQuantity> = emptyMap(),
+    val tradeQuantities: Map<TradeId, TradedQuantity> = emptyMap(),
     val cancelledQuantity: CancelledQuantity = CancelledQuantity(BigDecimal.ZERO),
     val completedTime: LocalDateTime? = null
 ) {

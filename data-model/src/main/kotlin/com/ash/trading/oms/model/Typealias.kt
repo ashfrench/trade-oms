@@ -13,6 +13,6 @@ typealias TotalQuantity = BigDecimal
 typealias OpenQuantity = BigDecimal
 typealias ExecutedQuantity = BigDecimal
 typealias WorkedQuantity = BigDecimal
-typealias TradeQuantity = BigDecimal
+typealias TradedQuantity = BigDecimal
 typealias UsedQuantity = BigDecimal
 typealias Quantity = BigDecimal
