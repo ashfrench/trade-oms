@@ -12,6 +12,22 @@ enum class OmsTradeState {
         override fun validate(data: TradeQuantity) = check (data in NEW) { "$NEW Data should have ZERO used quantity" }
 
     },
+    SENT_TO_EMS {
+        override fun isValid(data: TradeQuantity): Boolean = TODO()
+        override fun validate(data: TradeQuantity) = TODO()
+    },
+    CANCELLED{
+        override fun isValid(data: TradeQuantity): Boolean = TODO()
+        override fun validate(data: TradeQuantity) = TODO()
+    },
+    EXECUTED {
+        override fun isValid(data: TradeQuantity): Boolean = TODO()
+        override fun validate(data: TradeQuantity) = TODO()
+    },
+    COMPLETED {
+        override fun isValid(data: TradeQuantity): Boolean = TODO()
+        override fun validate(data: TradeQuantity) = TODO()
+    },
     ERROR {
         override fun isValid(data: TradeQuantity): Boolean = TODO()
         override fun validate(data: TradeQuantity) = TODO()
