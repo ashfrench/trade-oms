@@ -40,7 +40,7 @@ enum class OmsTradeState {
 
     abstract fun isValid(data: TradeQuantity): Boolean
     abstract fun validate(data: TradeQuantity)
-    val handler: TradeStateEventHandler = TODO()
+    private val handler: TradeStateEventHandler = TODO()
 
 }
 
