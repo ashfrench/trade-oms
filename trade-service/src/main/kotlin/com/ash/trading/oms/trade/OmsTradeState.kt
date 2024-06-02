@@ -13,8 +13,8 @@ enum class OmsTradeState {
 
     },
     SENT_TO_EMS {
-        override fun isValid(data: TradeQuantity): Boolean = TODO()
-        override fun validate(data: TradeQuantity) = TODO()
+        override fun isValid(data: TradeQuantity): Boolean = data.workedQuantity > BigDecimal.ZERO
+        override fun validate(data: TradeQuantity) = check(data in SENT_TO_EMS) { "$SENT_TO_EMS Data should have worked quantity" }
     },
     CANCELLED{
         override fun isValid(data: TradeQuantity): Boolean = TODO()

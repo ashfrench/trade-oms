@@ -4,10 +4,12 @@ import java.math.BigDecimal
 
 data class TradeQuantity(
     val totalQuantity: TotalQuantity,
-    val workedQuantity: WorkedQuantity = BigDecimal.ZERO,
-    val executedQuantity: ExecutedQuantity = BigDecimal.ZERO,
+    val workedQuantities: Map<EMSOrderId, WorkedQuantity> = emptyMap(),
+    val executedQuantities: Map<EMSOrderId, ExecutedQuantity> = emptyMap(),
     val cancelledQuantity: CancelledQuantity = CancelledQuantity(BigDecimal.ZERO)
 ) {
+    val workedQuantity: WorkedQuantity = workedQuantities.values.sumOf { it }
+    val executedQuantity: ExecutedQuantity = executedQuantities.values.sumOf { it }
     val usedQuantity: UsedQuantity = executedQuantity + workedQuantity + cancelledQuantity
     val openQuantity: OpenQuantity = totalQuantity - usedQuantity
 

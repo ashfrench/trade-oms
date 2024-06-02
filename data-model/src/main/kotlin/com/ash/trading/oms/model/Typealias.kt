@@ -6,6 +6,7 @@ import java.util.*
 typealias OrderId = UUID
 typealias TradeId = UUID
 typealias TradeOrderId = UUID
+typealias EMSOrderId = UUID
 typealias UserId = UUID
 typealias TraderId = UUID
 
