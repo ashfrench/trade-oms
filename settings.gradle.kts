@@ -5,7 +5,7 @@ plugins {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            library("swagger", "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+            library("swagger", "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
             library("kotlinxjson", "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
         }
 
