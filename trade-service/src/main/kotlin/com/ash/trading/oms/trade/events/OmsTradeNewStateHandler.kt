@@ -11,6 +11,7 @@ object OmsTradeNewStateHandler : TradeStateEventHandler {
     override fun handleEvent(data: TradeQuantity, event: OmsTradeEvent): TradeQuantityState {
         return try {
             when (event) {
+                is OmsSendToEmsTradeEvent -> handleSendToEms(event)
                 else -> {
                     logger.warn("NO IDEA $event")
                     TODO()
@@ -20,5 +21,9 @@ object OmsTradeNewStateHandler : TradeStateEventHandler {
             logger.error("Error Handling Event Type [${event.javaClass.simpleName}] from ${OmsTradeState.NEW} state", e)
             data to OmsTradeState.NEW
         }
+    }
+
+    private fun handleSendToEms(event: OmsSendToEmsTradeEvent): TradeQuantityState {
+        TODO("Not yet implemented")
     }
 }
