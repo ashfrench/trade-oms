@@ -73,7 +73,9 @@ enum class OmsOrderState {
 
     fun handleEvent(data: OrderQuantity, event: OmsOrderEvent): OrderQuantityState {
         validate(data)
-        return handler.handleEvent(data, event)
+        return handler.handleEvent(data, event).also {
+            validate(it)
+        }
     }
 
     abstract fun isValid(data: OrderQuantity): Boolean
@@ -86,3 +88,4 @@ enum class OmsOrderState {
 operator fun OmsOrderState.contains(data: OrderQuantity) = isValid(data)
 
 typealias OrderQuantityState = Pair<OrderQuantity, OmsOrderState>
+private fun validate(stateQuantity: OrderQuantityState) = stateQuantity.second.validate(stateQuantity.first)
