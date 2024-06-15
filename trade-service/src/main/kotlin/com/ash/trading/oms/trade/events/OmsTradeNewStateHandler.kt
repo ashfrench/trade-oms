@@ -11,7 +11,7 @@ object OmsTradeNewStateHandler : TradeStateEventHandler {
     override fun handleEvent(data: TradeQuantity, event: OmsTradeEvent): TradeQuantityState {
         return try {
             when (event) {
-                is OmsSendToEmsTradeEvent -> handleSendToEms(event)
+                is OmsSendToEmsTradeEvent -> handleSendToEms(data, event)
                 else -> {
                     logger.warn("NO IDEA $event")
                     TODO()
@@ -23,7 +23,7 @@ object OmsTradeNewStateHandler : TradeStateEventHandler {
         }
     }
 
-    private fun handleSendToEms(event: OmsSendToEmsTradeEvent): TradeQuantityState {
+    private fun handleSendToEms(data: TradeQuantity, event: OmsSendToEmsTradeEvent): TradeQuantityState {
         TODO("Not yet implemented")
     }
 }
