@@ -17,3 +17,4 @@ typealias WorkedQuantity = BigDecimal
 typealias TradedQuantity = BigDecimal
 typealias UsedQuantity = BigDecimal
 typealias Quantity = BigDecimal
+typealias ConfirmedQuantity = BigDecimal
